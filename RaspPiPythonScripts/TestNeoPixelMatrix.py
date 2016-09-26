@@ -16,4 +16,6 @@ while 1:
 		lastDrawTime = time.time()
 
 	circuitPlayground.Read()
-	neoMatrix.SetAllRed(circuitPlayground.Sound/4)
+	neoMatrix.SetAllRed(circuitPlayground.Cap12/10)
+
+	print circuitPlayground.Cap12/10

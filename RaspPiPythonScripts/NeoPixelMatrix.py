@@ -19,6 +19,7 @@ class NeoPixelMatrix:
 		return
 
 	def SetAllRed(self, value) :
+
 		for x in range(0, self.MemorySize) :
 			if x%3 == 1 :
 				self.LEDMemory[x] = value
@@ -31,5 +32,11 @@ class NeoPixelMatrix:
 	def DrawLEDMemory(self) :
 		self.ser.write('start'.encode())
 		for x in range(0, len(self.LEDMemory)) :
+			
+			if self.LEDMemory[x] > 255 :
+				self.LEDMemory[x] = 255
+			elif self.LEDMemory[x] < 0 :
+				self.LEDMemory[x] = 0
+
 			self.ser.write(chr(self.LEDMemory[x]))
 		return

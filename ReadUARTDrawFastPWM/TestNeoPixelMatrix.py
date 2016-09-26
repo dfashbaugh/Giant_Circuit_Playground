@@ -12,5 +12,5 @@ circuitPlayground.Read()
 while 1:
 	neoMatrix.DrawLEDMemory()
 	circuitPlayground.Read()
-	print circuitPlayground.Light
+	#print circuitPlayground.Light
 	neoMatrix.SetAllRed(circuitPlayground.Light)

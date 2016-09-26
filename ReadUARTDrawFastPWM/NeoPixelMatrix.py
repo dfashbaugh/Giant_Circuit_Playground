@@ -8,7 +8,7 @@ class NeoPixelMatrix:
 	LEDMemory = [int]*MemorySize
 
 	def __init__(self, SerialPort):
-		self.ser.baudrate = 9600
+		self.ser.baudrate = 2000000
 		self.ser.port = SerialPort
 		self.ser.open()
 		print 'Initialized Serial Port'

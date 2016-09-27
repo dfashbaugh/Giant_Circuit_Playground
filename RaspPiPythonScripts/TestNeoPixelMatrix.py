@@ -24,10 +24,7 @@ draw.rectangle((256, 0, 287, 31), fill=(0, 0, 0), outline=(255,255,0))
 image.show()
 
 lastDrawTime = 0
-animationTime = 0
-counter = 0
-goingUp = 1
-
+ 
 circuitPlayground = CircuitPlayGround('/dev/cu.usbmodem1411')
 neoMatrix = NeoPixelMatrix('/dev/cu.usbmodem2115241')
 
@@ -43,7 +40,14 @@ while 1:
 	capValue = circuitPlayground.Cap12/10
 	#neoMatrix.SetAllRed(circuitPlayground.Cap12/10)
 
-	#if time.time() - animationTime > 0.2 :
-	#	draw.rectangle( (0,0, 319, 31), fill = (0,0,0), outline=(0,0,0))
-	#	draw.rectangle((capValue, 0, capValue+31, 31), fill=(255, 0, 0), outline=(255,0,0))
-	#	neoMatrix.SetImage(image, 0, 0)
+	#First Interactive Mode
+	brightness = float((circuitPlayground.Light))/1024
+	channel1Value = 128 + 12*int(circuitPlayground.X)
+	channel2Value = 128 + 12*int(circuitPlayground.Y)
+	channel3Value = 128 + 12*int(CircuitPlayGround.Z)
+	draw.rectangle( (0,0, 319, 31), fill = (int(brightness*channel1Value), int(brightness*channel2Value), int(brightness*channel3Value)), outline=(0,0,0))
+	neoMatrix.SetImage(image, 0, 0)
+
+	#draw.rectangle( (0,0, 319, 31), fill = (0,0,0), outline=(0,0,0))
+	#draw.rectangle((capValue, 0, capValue+31, 31), fill=(255, 0, 0), outline=(255,0,0))
+	#neoMatrix.SetImage(image, 0, 0)

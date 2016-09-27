@@ -53,11 +53,11 @@ class NeoPixelMatrix:
 		neoPix = self.BinImage(image)
 
 		for memoryPos in range(0, self.MemorySize/3) :
-			self.LEDMemory[memoryPos*3] = neoPix[memoryPos/8, memoryPos%8][1]
-			self.LEDMemory[memoryPos*3+1] = neoPix[memoryPos/8, memoryPos%8][0]
-			self.LEDMemory[memoryPos*3+2] = neoPix[memoryPos/8, memoryPos%8][2]
-
-		print "Set an image"
+			pixelX = memoryPos%8 + 8*(memoryPos/64)
+			pixelY = (memoryPos/8)%8
+			self.LEDMemory[memoryPos*3] = neoPix[pixelX, pixelY][1]
+			self.LEDMemory[memoryPos*3+1] = neoPix[pixelX, pixelY][0]
+			self.LEDMemory[memoryPos*3+2] = neoPix[pixelX, pixelY][2]
 
 	def DrawLEDMemory(self) :
 		self.ser.write('start'.encode())

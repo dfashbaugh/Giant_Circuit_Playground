@@ -27,7 +27,7 @@ class NeoPixelMatrix:
 			else :
 				self.LEDMemory[x] = 0x00
 	
-	def SetImage(self, image, x, y):
+	def BinImage(self, image) :
 		px = image.load()
 		#Bin 16 -> 1
 		neoImage = Image.new("RGB", (8,8))
@@ -47,10 +47,14 @@ class NeoPixelMatrix:
 				channel2 = channel2/16
 				channel3 = channel3/16
 				neoPix[x,y] = (channel1, channel2, channel3)
+		return neoPix
+
+	def SetImage(self, image, x, y):
+		neoPix = self.BinImage(image)
 
 		for memoryPos in range(0, 64) :
-			self.LEDMemory[memoryPos*3] = neoPix[memoryPos%8, memoryPos/8][0]
-			self.LEDMemory[memoryPos*3+1] = neoPix[memoryPos%8, memoryPos/8][1]
+			self.LEDMemory[memoryPos*3] = neoPix[memoryPos%8, memoryPos/8][1]
+			self.LEDMemory[memoryPos*3+1] = neoPix[memoryPos%8, memoryPos/8][0]
 			self.LEDMemory[memoryPos*3+2] = neoPix[memoryPos%8, memoryPos/8][2]
 
 		print "Set an image"

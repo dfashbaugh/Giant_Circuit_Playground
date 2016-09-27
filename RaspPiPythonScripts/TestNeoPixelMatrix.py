@@ -6,10 +6,11 @@ from PIL import Image
 from PIL import ImageDraw
 
 image = Image.new("RGB", (32, 32))
+#image = Image.open("newedit.png")
 draw = ImageDraw.Draw(image)
-draw.rectangle((0, 0, 31, 31), fill=(0, 100, 0), outline=(0,0,255))
-draw.line( (0,0,31,31), fill=(255,0,0) )
-draw.line( (0, 31, 31, 0), fill=(255,0,0) )
+draw.line( (0,0,31,31), fill=(0,255,0) )
+draw.line( (0, 31, 31, 0), fill=(0,255,0) )
+image.show()
 
 lastDrawTime = 0
 

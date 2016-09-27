@@ -93,6 +93,6 @@ void loop() {
   Serial.println(cap_12);
 
 
-  // delay(10);
+  delay(100);
 }
 

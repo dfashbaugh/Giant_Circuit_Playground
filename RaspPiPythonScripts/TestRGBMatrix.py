@@ -4,6 +4,7 @@ from NeoPixelMatrix import NeoPixelMatrix
 from CircuitPlayGround import CircuitPlayGround
 from PIL import Image
 from PIL import ImageDraw
+from rgbmatrix import RGBMatrix
 
 image = Image.new("RGB", (320, 32))
 #image = Image.open("digikeyx10.png")
@@ -26,15 +27,12 @@ image.show()
 lastDrawTime = 0
  
 circuitPlayground = CircuitPlayGround('/dev/cu.usbmodem1411')
-neoMatrix = NeoPixelMatrix('/dev/cu.usbmodem2115241')
+matrix = RGBMatrix(32, 10, 1)
 
-neoMatrix.Clear()
-neoMatrix.SetImage(image, 0, 0)
+matrix.Clear()
+matrix.SetImage(image, 0, 0)
 
 while 1:
-	if time.time() - lastDrawTime > 0.03 :
-		neoMatrix.DrawLEDMemory()
-		lastDrawTime = time.time()
 
 	circuitPlayground.Read()
 	capValue = circuitPlayground.Cap12/10
@@ -47,7 +45,7 @@ while 1:
 	channel2Value = 128 + 12*int(circuitPlayground.Y)
 	channel3Value = 128 + 12*int(CircuitPlayGround.Z)
 	draw.rectangle( (0,0, 319, 31), fill = (int(brightness*channel1Value), int(brightness*channel2Value), int(brightness*channel3Value)), outline=(0,0,0))
-	neoMatrix.SetImage(image, 0, 0)
+	matrix.SetImage(image, 0, 0)
 
 	#draw.rectangle( (0,0, 319, 31), fill = (0,0,0), outline=(0,0,0))
 	#draw.rectangle((capValue, 0, capValue+31, 31), fill=(255, 0, 0), outline=(255,0,0))

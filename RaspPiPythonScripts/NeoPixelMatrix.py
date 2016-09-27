@@ -11,7 +11,7 @@ class NeoPixelMatrix:
 		self.ser.baudrate = 2000000
 		self.ser.port = SerialPort
 		self.ser.open()
-		print 'Initialized Serial Port'
+		print 'Initialized NeoPixel Serial Port'
  
 	def Clear(self) :
 		for x in range(0, self.MemorySize) :
@@ -32,7 +32,7 @@ class NeoPixelMatrix:
 	def DrawLEDMemory(self) :
 		self.ser.write('start'.encode())
 		for x in range(0, len(self.LEDMemory)) :
-			
+
 			if self.LEDMemory[x] > 255 :
 				self.LEDMemory[x] = 255
 			elif self.LEDMemory[x] < 0 :

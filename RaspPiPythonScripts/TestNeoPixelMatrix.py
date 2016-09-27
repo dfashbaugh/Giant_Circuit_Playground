@@ -15,5 +15,3 @@ while 1:
 
 	circuitPlayground.Read()
 	neoMatrix.SetAllRed(circuitPlayground.Cap12/10)
-
-	print circuitPlayground.Cap12/10

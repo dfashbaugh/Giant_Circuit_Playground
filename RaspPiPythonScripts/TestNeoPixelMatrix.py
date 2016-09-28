@@ -52,26 +52,39 @@ def GetAttractModeImage(frame) :
 	draw.rectangle((0, 0, 319, 31), fill=(sound, 0, 0), outline=(255,255,0))
 	return image
 
+def LightSingleSimonColor(color) : 
+	image = Image.new("RGB", (320,32))
+
+	if color == 0 :
+		image = GetSimonRedImage()
+	elif color == 1 :
+		image = GetSimonYellowImage()
+	elif color == 2 :
+		image = GetSimonBlueImage()
+	elif color == 3 :
+		image = GetSimonGreenImage()
+
+	return image
+
 def LightSimonColors(colorList, frame, framesPerColor) :
 	numColors = len(colorList)
 	curColorAddr = frame/framesPerColor
 	myColor = colorList[curColorAddr]
 
-	image = Image.new("RGB", 320,32))
+	return LightSingleSimonColor(myColor)
 
-	if myColor == 0 :
-		image = GetSimonRedImage()
-	elif myColor == 1 :
-		image = GetSimonYellowImage()
-	elif myColor == 2 :
-		image = GetSimonBlueImage()
-	elif myColor == 3 :
-		image = GetSimonGreenImage()
+def ProcessSimonUserInput(cap10, cap9, cap6, cap12, cap3, cap2, cap0, cap1, capacitorThreshold) :
 
-	return image
+	if cap10 > capacitorThreshold or cap9 > capacitorThreshold :
+		return 0
+	elif cap6 > capacitorThreshold or cap12 > capacitorThreshold :
+		return 1
+	elif cap3 > capacitorThreshold or cap2 > capacitorThreshold :
+		return 2
+	elif cap0 > capacitorThreshold or cap1 > capacitorThreshold :
+		return 3
 
-def ProcessSimonUserInput(cap10, cap9, cap6, cap12, cap3, cap2, cap0, cap1) :
-	return
+	return 5
 
 def CheckSimonColors(simonColors, playerColors) :
 	for x in range(0, len(playerColors)) :
@@ -128,29 +141,31 @@ while 1:
 	#When ready for new color, set the ready for new color flag to 0 and the frame to 0
 	if simonState == 0 :
 		colorList.append(random.randrange(0,4))
-		readyForNewColor = 0
 		frame = 0
 		simonState = 1
+
 	elif simonState == 1 :
-		matrix.SetImage(LightSimonColors(colorList, frame, framesPerColor), 0, 0)
-		if frame > framesPerColor*len(colorList) : 
+		if frame == framesPerColor*len(colorList) : 
 			matrix.Clear()
 			simonState = 2
+		else :
+			matrix.SetImage(LightSimonColors(colorList, frame, framesPerColor), 0, 0)
+
 	elif simonState == 2 :
-		newColor = ProcessSimonUserInput(circuitPlayground.cap10, circuitPlayground.cap9, circuitPlayground.cap6, circuitPlayground.cap12, circuitPlayground.cap3, circuitPlayground.cap2, circuitPlayground.cap0, circuitPlayground.cap1)
+		newColor = ProcessSimonUserInput(circuitPlayground.Cap10, circuitPlayground.Cap9, circuitPlayground.Cap6, circuitPlayground.Cap12, circuitPlayground.Cap3, circuitPlayground.Cap2, circuitPlayground.Cap0, circuitPlayground.Cap1, capacitorThreshold)
 		if newColor >= 0 and newColor<=3 :
+			LightSingleSimonColor(newColor)
 			inputColors.append(newColor)
 			if CheckSimonColors(colorList, inputColors) == 0 :
 				simonState = 3
 			elif CheckSimonColors(colorList, inputColors) == 2 :
 				simonState = 0
+
 	elif simonState == 3 :
 		colorList = []
 		inputColors = []
 		simonState = 0
 		frame = 0
-
-
 
 	frame = frame + 1
 

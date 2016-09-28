@@ -40,7 +40,7 @@ def GetAttractModeImage(frame) :
 		print 'Do second thing'
 	elif frame > 400 :
 		print 'Do third thing'
-	else
+	else :
 		print 'Do first thing'
 
 	image = Image.new("RGB", (320, 32))
@@ -55,15 +55,16 @@ draw = ImageDraw.Draw(image)
 lastDrawTime = 0
  
 circuitPlayground = CircuitPlayGround('/dev/cu.usbmodem1411')
-neoMatrix = NeoPixelMatrix('/dev/cu.usbmodem2115241')
+matrix = NeoPixelMatrix('/dev/cu.usbmodem2115241')
+#matrix = RGBMatrix(32, 10, 1)
 
-neoMatrix.Clear()
-neoMatrix.SetImage(image, 0, 0)
+matrix.Clear()
+matrix.SetImage(image, 0, 0)
 
 while 1:
-	# Define the frame rate for the whole system
+	# Define the frame rate for the whole system.. Only for Neo Pixel
 	if time.time() - lastDrawTime > 0.03 :
-		neoMatrix.DrawLEDMemory()
+		matrix.DrawLEDMemory()
 		lastDrawTime = time.time()
 
 	circuitPlayground.Read()
@@ -76,7 +77,7 @@ while 1:
 	channel2Value = 128 + 12*int(circuitPlayground.Y)
 	channel3Value = 128 + 12*int(CircuitPlayGround.Z)
 	draw.rectangle( (0,0, 319, 31), fill = (int(brightness*channel1Value), int(brightness*channel2Value), int(brightness*channel3Value)), outline=(0,0,0))
-	neoMatrix.SetImage(image, 0, 0)
+	matrix.SetImage(image, 0, 0)
 
 	#Simon
 

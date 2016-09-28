@@ -74,8 +74,6 @@ while 1:
 		lastDrawTime = time.time()
 
 	circuitPlayground.Read()
-	#capValue = circuitPlayground.Cap12/10
-	#neoMatrix.SetAllRed(circuitPlayground.Cap12/10)
 
 	#First Interactive Mode
 	brightness = float((circuitPlayground.Light))/1024
@@ -84,10 +82,3 @@ while 1:
 	channel3Value = 128 + 12*int(CircuitPlayGround.Z)
 	draw.rectangle( (0,0, 319, 31), fill = (int(brightness*channel1Value), int(brightness*channel2Value), int(brightness*channel3Value)), outline=(0,0,0))
 	matrix.SetImage(image, 0, 0)
-
-	#Simon
-
-
-	#draw.rectangle( (0,0, 319, 31), fill = (0,0,0), outline=(0,0,0))
-	#draw.rectangle((capValue, 0, capValue+31, 31), fill=(255, 0, 0), outline=(255,0,0))
-	#neoMatrix.SetImage(image, 0, 0)

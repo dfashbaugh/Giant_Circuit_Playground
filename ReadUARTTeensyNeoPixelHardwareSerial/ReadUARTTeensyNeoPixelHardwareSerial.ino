@@ -54,6 +54,7 @@ void setup()
 	Serial1.begin(500000);
 	LEDS.addLeds <OCTOWS2811> (leds, NUM_LEDS/8).setCorrection( 0x9FFAF0 );
    	FastLED.show();
+   	pinMode(13, OUTPUT);
 }
 
 long lastMillis = 0;
@@ -76,6 +77,7 @@ void loop ()
 
 	if(memoryCounter == REMOTE_MEMORY_SIZE)
 	{
+		digitalWrite(13, HIGH);
 		correctDrawingMemory();
 
          for(int i = 0; i < NUM_LEDS; i++ )
@@ -87,7 +89,8 @@ void loop ()
           	leds[i] = myColor;
          }
 
-         FastLED.show();
+         memoryCounter = 0;
 	}
+	FastLED.show();
 }
 

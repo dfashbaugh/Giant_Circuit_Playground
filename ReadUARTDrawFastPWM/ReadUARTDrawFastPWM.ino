@@ -3,10 +3,12 @@
 #include <OctoWS2811.h>
 #include <FastLED.h>
 
-#define NUM_LEDS 512
+#define NUM_LEDS 1024
 #define MEMORY_SIZE NUM_LEDS*3
+#define REMOTE_MEMORY_SIZE 1920
 
-byte drawingMemory[MEMORY_SIZE];
+byte drawingMemory[REMOTE_MEMORY_SIZE];
+byte trueDrawingMemory[MEMORY_SIZE];
 
 CRGB leds[NUM_LEDS];
 
@@ -32,9 +34,28 @@ void CheckForDelimeter(byte recvInfo)
 		recvState = 0;
 }
 
+void correctDrawingMemory()
+{
+	int trueMemoryCounter = 0;
+	for(int i = 0; i < MEMORY_SIZE; i++)
+	{
+		trueDrawingMemory[i] = 0;
+	}
+	for(int i = 0; i < REMOTE_MEMORY_SIZE; i++)
+	{
+		if(i == 64*3 || i == 64*2*3 || i == 64*3*3 || i == 64*4*3 || i == 64*5*3 || i == 64*6*3)
+		{
+			trueMemoryCounter = trueMemoryCounter + 64*3;
+		}
+
+		trueDrawingMemory[trueMemoryCounter] = drawingMemory[i];
+		trueMemoryCounter++;
+	}
+}
+
 void setup()
 {
-	Serial.begin(115200);
+	Serial.begin(500000);
 	LEDS.addLeds <OCTOWS2811> (leds, NUM_LEDS/8).setCorrection( 0x9FFAF0 );
    	FastLED.show();
 }
@@ -47,7 +68,7 @@ void loop ()
 	{
 		byte recvInfo = Serial.read();
 
-		if(memoryCounter < MEMORY_SIZE)
+		if(memoryCounter < REMOTE_MEMORY_SIZE)
 		{
 			recvInfo = map(recvInfo, 0, 255, 0, 128);
 			drawingMemory[memoryCounter] = recvInfo;
@@ -57,14 +78,16 @@ void loop ()
 		CheckForDelimeter(recvInfo);
 	}
 
-	if(memoryCounter == MEMORY_SIZE)
+	if(memoryCounter == REMOTE_MEMORY_SIZE)
 	{
+		correctDrawingMemory();
+
          for(int i = 0; i < NUM_LEDS; i++ )
          {
          	CRGB myColor;
-         	myColor.green = drawingMemory[i*3];
-         	myColor.red = drawingMemory[i*3+1];
-         	myColor.blue = drawingMemory[i*3+2];
+         	myColor.green = trueDrawingMemory[i*3];
+         	myColor.red = trueDrawingMemory[i*3+1];
+         	myColor.blue = trueDrawingMemory[i*3+2];
           	leds[i] = myColor;
          }
 

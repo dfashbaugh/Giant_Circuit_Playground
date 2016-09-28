@@ -9,6 +9,24 @@ from PIL import Image
 from PIL import ImageDraw
 import random
 
+def GetTestImage() :
+	image = Image.new("RGB", (320, 32))
+	#image = Image.open("digikeyx10.png")
+	draw = ImageDraw.Draw(image)
+	draw.line( (0,0,31,31), fill=(0,255,0) )
+	draw.line( (0, 31, 31, 0), fill=(0,255,0) )
+	draw.line( (32,0,63,31), fill=(255,0,0) )
+	draw.line( (32, 31, 63, 0), fill=(255,0,0) )
+	draw.rectangle((64, 0, 95, 31), fill=(0, 0, 255), outline=(255,0,0))
+	draw.rectangle((96, 0, 127, 31), fill=(0, 255, 255), outline=(255,0,0))
+	draw.rectangle((128, 0, 159, 31), fill=(255, 255, 0), outline=(255,0,0))
+	draw.rectangle((160, 0, 191, 31), fill=(0, 255, 0), outline=(255,0,0))
+	draw.rectangle((192, 0, 223, 31), fill=(0, 0, 0), outline=(255,0,0))
+	draw.rectangle((224, 0, 255, 31), fill=(0, 0, 0), outline=(255,0,0))
+	draw.rectangle((256, 0, 287, 31), fill=(0, 0, 0), outline=(0, 0,255))
+	draw.rectangle((288, 0, 319, 31), fill=(0, 0, 0), outline=(255,255,255))
+	return image
+
 def GetSimonRedImage() :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
@@ -110,14 +128,15 @@ lastUserInputTime = 0
 image = Image.new("RGB", (320, 32))
 #image = Image.open("digikeyx10.png")
 draw = ImageDraw.Draw(image)
+image = GetTestImage()
 
 lastDrawTime = 0
  
 #circuitPlayground = CircuitPlayGround('/dev/cu.usbmodem1411')
 circuitPlayground = SimulationPlayGround()
 
-#matrix = NeoPixelMatrix('/dev/cu.usbmodem2115241')
-matrix = SimulationMatrix()
+matrix = NeoPixelMatrix('/dev/cu.usbmodem2115241')
+#matrix = SimulationMatrix()
 #matrix = RGBMatrix(32, 10, 1)
 
 matrix.Clear()

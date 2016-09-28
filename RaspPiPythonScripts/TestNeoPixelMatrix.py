@@ -105,6 +105,7 @@ framesPerColor = 300
 inputColors = []
 capacitorThreshold = 100
 simonState = 0 # 0 - Add new Color.. # 1 - Display Colors # 2 - Take User input # 3 - Lose
+lastUserInputTime = 0
 
 image = Image.new("RGB", (320, 32))
 #image = Image.open("digikeyx10.png")
@@ -153,7 +154,8 @@ while 1:
 
 	elif simonState == 2 :
 		newColor = ProcessSimonUserInput(circuitPlayground.Cap10, circuitPlayground.Cap9, circuitPlayground.Cap6, circuitPlayground.Cap12, circuitPlayground.Cap3, circuitPlayground.Cap2, circuitPlayground.Cap0, circuitPlayground.Cap1, capacitorThreshold)
-		if newColor >= 0 and newColor<=3 :
+		if newColor >= 0 and newColor<=3 and time.time() - lastUserInputTime > 1.0:
+			lastUserInputTime = time.time()
 			matrix.SetImage(LightSingleSimonColor(newColor), 0, 0)
 			inputColors.append(newColor)
 			if CheckSimonColors(colorList, inputColors) == 0 :

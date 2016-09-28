@@ -154,7 +154,7 @@ while 1:
 	elif simonState == 2 :
 		newColor = ProcessSimonUserInput(circuitPlayground.Cap10, circuitPlayground.Cap9, circuitPlayground.Cap6, circuitPlayground.Cap12, circuitPlayground.Cap3, circuitPlayground.Cap2, circuitPlayground.Cap0, circuitPlayground.Cap1, capacitorThreshold)
 		if newColor >= 0 and newColor<=3 :
-			LightSingleSimonColor(newColor)
+			matrix.SetImage(LightSingleSimonColor(newColor), 0, 0)
 			inputColors.append(newColor)
 			if CheckSimonColors(colorList, inputColors) == 0 :
 				simonState = 3
@@ -167,7 +167,8 @@ while 1:
 		simonState = 0
 		frame = 0
 
+		
 	frame = frame + 1
 
-
+	
 

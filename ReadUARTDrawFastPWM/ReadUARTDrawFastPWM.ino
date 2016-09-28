@@ -34,7 +34,7 @@ void CheckForDelimeter(byte recvInfo)
 
 void setup()
 {
-	Serial.begin(2000000);
+	Serial.begin(115200);
 	LEDS.addLeds <OCTOWS2811> (leds, NUM_LEDS/8).setCorrection( 0x9FFAF0 );
    	FastLED.show();
 }

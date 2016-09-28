@@ -29,6 +29,25 @@ def GetSimonYellowImage() :
 	draw.rectangle((224, 0, 287, 31), fill=(255, 255, 0), outline=(255,255,0))
 	return image
 
+def GetSoundReactiveImage(sound) :
+	image = Image.new("RGB", (320, 32))
+	draw = ImageDraw.Draw(image)
+	draw.rectangle((0, 0, 319, 31), fill=(sound, 0, 0), outline=(255,255,0))
+	return image
+
+def GetAttractModeImage(frame) :
+	if frame > 200 :
+		print 'Do second thing'
+	elif frame > 400 :
+		print 'Do third thing'
+	else
+		print 'Do first thing'
+
+	image = Image.new("RGB", (320, 32))
+	draw = ImageDraw.Draw(image)
+	draw.rectangle((0, 0, 319, 31), fill=(sound, 0, 0), outline=(255,255,0))
+	return image
+
 image = Image.new("RGB", (320, 32))
 #image = Image.open("digikeyx10.png")
 draw = ImageDraw.Draw(image)
@@ -42,6 +61,7 @@ neoMatrix.Clear()
 neoMatrix.SetImage(image, 0, 0)
 
 while 1:
+	# Define the frame rate for the whole system
 	if time.time() - lastDrawTime > 0.03 :
 		neoMatrix.DrawLEDMemory()
 		lastDrawTime = time.time()

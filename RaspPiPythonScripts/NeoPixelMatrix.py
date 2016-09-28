@@ -4,7 +4,7 @@ from PIL import Image
 
 class NeoPixelMatrix:
 
-	MemorySize = 1536
+	MemorySize = 1920
 	ser = serial.Serial()
 	LEDMemory = [int]*MemorySize
 

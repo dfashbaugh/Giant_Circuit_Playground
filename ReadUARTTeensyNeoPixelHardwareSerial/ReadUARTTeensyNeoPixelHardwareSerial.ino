@@ -3,7 +3,7 @@
 #include <OctoWS2811.h>
 #include <FastLED.h>
 
-#define NUM_LEDS 512
+#define NUM_LEDS 640
 #define MEMORY_SIZE NUM_LEDS*3
 
 byte drawingMemory[MEMORY_SIZE];

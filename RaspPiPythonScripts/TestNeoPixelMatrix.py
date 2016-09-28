@@ -163,7 +163,7 @@ while 1:
 			elif CheckSimonColors(colorList, inputColors) == 2 :
 				simonState = 0
 
-	elif simonState == 3 :
+	else :
 		colorList = []
 		inputColors = []
 		simonState = 0

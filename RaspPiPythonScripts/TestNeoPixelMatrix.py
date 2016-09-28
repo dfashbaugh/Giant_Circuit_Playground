@@ -2,6 +2,9 @@ import time
 import serial
 from NeoPixelMatrix import NeoPixelMatrix
 from CircuitPlayGround import CircuitPlayGround
+#from rgbmatrix import RGBMatrix
+from SimulationMatrix import SimulationMatrix
+from SimulationPlayGround import SimulationPlayGround
 from PIL import Image
 from PIL import ImageDraw
 
@@ -54,8 +57,11 @@ draw = ImageDraw.Draw(image)
 
 lastDrawTime = 0
  
-circuitPlayground = CircuitPlayGround('/dev/cu.usbmodem1411')
-matrix = NeoPixelMatrix('/dev/cu.usbmodem2115241')
+#circuitPlayground = CircuitPlayGround('/dev/cu.usbmodem1411')
+circuitPlayground = SimulationPlayGround()
+
+#matrix = NeoPixelMatrix('/dev/cu.usbmodem2115241')
+matrix = SimulationMatrix()
 #matrix = RGBMatrix(32, 10, 1)
 
 matrix.Clear()

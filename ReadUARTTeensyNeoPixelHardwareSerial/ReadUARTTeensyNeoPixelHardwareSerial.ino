@@ -36,36 +36,16 @@ void CheckForDelimeter(byte recvInfo)
 
 void correctDrawingMemory()
 {
+	int trueMemoryCounter = 0;
 	for(int i = 0; i < REMOTE_MEMORY_SIZE; i++)
 	{
-		if(i < 64*3)
+		if(i == 64*2*3 || i == 64*3*3 || i == 64*4*3 || i == 64*5*3 || i == 64*6*3)
 		{
-			trueDrawingMemory[i] = drawingMemory[i];
+			trueMemoryCounter = trueMemoryCounter + 64*3;
 		}
-		else if(i < 64*2*3)
-		{
-			trueDrawingMemory[i+64*3] = drawingMemory[i];
-		}
-		else if(i < 64*3*3)
-		{
-			trueDrawingMemory[i + 2*64*3] = drawingMemory[i];
-		}
-		else if(i < 64*4*3)
-		{
-			trueDrawingMemory[i + 3*64*3] = drawingMemory[i];
-		}
-		else if(i < 64*5*3)
-		{
-			trueDrawingMemory[i + 4*64*3] = drawingMemory[i];
-		}
-		else if(i < 64*6*3)
-		{
-			trueDrawingMemory[i + 5*64*3] = drawingMemory[i];
-		}
-		else
-		{
-			trueDrawingMemory[i + 6*64*3] = drawingMemory[i];
-		}
+
+		trueDrawingMemory[trueMemoryCounter] = drawingMemory[i];
+		trueMemoryCounter+=1;
 	}
 }
 
@@ -96,6 +76,8 @@ void loop ()
 
 	if(memoryCounter == REMOTE_MEMORY_SIZE)
 	{
+		correctDrawingMemory();
+
          for(int i = 0; i < NUM_LEDS; i++ )
          {
          	CRGB myColor;

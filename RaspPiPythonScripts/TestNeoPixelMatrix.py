@@ -127,6 +127,10 @@ def CheckSimonColors(simonColors, playerColors) :
 #Overall Control Variables
 frame = 0
 mode = 3 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter
+circuitPlayGroundType = 0 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
+matrixType = 0 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrixType = 2 : NeoPixel 8X8
+circuitPlaygroundPort = '/dev/cu.usbmodem1411'
+neoPixelMatrixPort = '/dev/cu.usbmodem2115241'
 
 #Game Variables
 colorList = []
@@ -143,12 +147,17 @@ image = GetTestImage()
 
 lastDrawTime = 0
  
-#circuitPlayground = CircuitPlayGround('/dev/cu.usbmodem1411')
-circuitPlayground = SimulationPlayGround()
+if circuitPlayGroundType == 0 :
+	circuitPlayground = SimulationPlayGround()
+else :
+	circuitPlayground = CircuitPlayGround(circuitPlaygroundPort)
 
-#matrix = NeoPixelMatrix('/dev/cu.usbmodem2115241')
-matrix = SimulationMatrix()
-#matrix = RGBMatrix(32, 10, 1)
+if matrixType == 0 :
+	matrix = SimulationMatrix()
+elif matrixType == 1 :
+	matrix = RGBMatrix(32, 10, 1)
+else :
+	matrix = NeoPixelMatrix(neoPixelMatrixPort)
 
 matrix.Clear()
 matrix.SetImage(image, 0, 0)

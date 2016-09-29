@@ -62,7 +62,7 @@ def GetAttractModeImage(frame, digiKeyLogo) :
 	draw = ImageDraw.Draw(image)
 
 	if frame > 200 :
-		draw.rectangle( (4*frame%319, 0, (4*frame+31)%319, 31), fill=(255, 0, 0), outline=(0,0,0))
+		draw.rectangle( (frame%319, 0, (frame+31)%319, 31), fill=(255, 0, 0), outline=(0,0,0))
 	elif frame > 100 :
 		image = digiKeyLogo
 	else :
@@ -127,10 +127,10 @@ def CheckSimonColors(simonColors, playerColors) :
 #Overall Control Variables
 frame = 0
 lastDrawTime = 0
-mode = 3 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter
+mode = 2 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter
 circuitPlayGroundType = 1 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
-matrixType = 0 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrixType = 2 : NeoPixel 8X8
-circuitPlaygroundPort = '/dev/cu.usbmodem1451'
+matrixType = 2 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrixType = 2 : NeoPixel 8X8
+circuitPlaygroundPort = '/dev/cu.usbmodem1411'
 neoPixelMatrixPort = '/dev/cu.usbmodem2115241'
 
 #Game Variables

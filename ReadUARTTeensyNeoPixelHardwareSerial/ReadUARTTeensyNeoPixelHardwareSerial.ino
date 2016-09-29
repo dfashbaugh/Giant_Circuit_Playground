@@ -15,6 +15,7 @@ CRGB leds7[128];
 CRGB leds8[128];
 
 long memoryCounter = 0;
+boolean drawTime = false;
 
 int recvState = 0;
 void CheckForDelimeter(byte recvInfo)
@@ -31,6 +32,7 @@ void CheckForDelimeter(byte recvInfo)
 	{
 		recvState = 0;
 		memoryCounter = 0;
+		drawTime = false;
 	}
 	else
 		recvState = 0;
@@ -66,20 +68,16 @@ void loop ()
 		}
 
 		CheckForDelimeter(recvInfo);
+
+		if(memoryCounter == MEMORY_SIZE)
+		{
+			if(recvInfo == 'e')
+				drawTime = true;
+		}
 	}
 
-	if(memoryCounter == MEMORY_SIZE)
+	if(memoryCounter == MEMORY_SIZE && drawTime)
 	{
-		//correctDrawingMemory();
-
-         //for(int i = 0; i < NUM_LEDS; i++ )
-         //{
-         //	CRGB myColor;
-         //	myColor.green = trueDrawingMemory[i*3];
-         //	myColor.red = trueDrawingMemory[i*3+1];
-         //	myColor.blue = trueDrawingMemory[i*3+2];
-         // 	leds[i] = myColor;
-         //}
 
 		for(int i = 0; i < NUM_LEDS; i++)
 		{

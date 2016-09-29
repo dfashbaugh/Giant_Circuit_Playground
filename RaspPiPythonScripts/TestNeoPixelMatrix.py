@@ -174,6 +174,7 @@ while 1:
 	if mode == 0 :
 		image = GetVJModeImage(circuitPlayground.Light, circuitPlayground.X, circuitPlayground.Y, circuitPlayground.Z)
 		matrix.SetImage(image, 0, 0)
+		
 	elif mode == 1 :
 		#When ready for new color, set the ready for new color flag to 0 and the frame to 0
 		if simonState == 0 :
@@ -204,10 +205,12 @@ while 1:
 			inputColors = []
 			simonState = 0
 			frame = 0
+
 	elif mode == 2 :
 		matrix.SetImage( GetAttractModeImage(frame, digiKeyLogoImage), 0, 0)
 		if frame > 600 :
 			frame = 0
+
 	else :
 		image = GetSoundReactiveImage(circuitPlayground.Sound)
 		matrix.SetImage(image, 0, 0)

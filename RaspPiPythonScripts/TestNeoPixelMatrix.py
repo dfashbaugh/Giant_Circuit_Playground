@@ -57,17 +57,17 @@ def GetSoundReactiveImage(sound) :
 	draw.rectangle((0, 0, 319, 31), fill=(sound, 0, 0), outline=(255,255,0))
 	return image
 
-def GetAttractModeImage(frame) :
-	if frame > 200 :
-		print 'Do second thing'
-	elif frame > 400 :
-		print 'Do third thing'
-	else :
-		print 'Do first thing'
-
+def GetAttractModeImage(frame, digiKeyLogo) :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	draw.rectangle((0, 0, 319, 31), fill=(sound, 0, 0), outline=(255,255,0))
+
+	if frame > 200 :
+		draw.rectangle( (4*frame%319, 0, (4*frame+31)%319, 31), fill=(255, 0, 0), outline=(0,0,0))
+	elif frame > 100 :
+		image = digiKeyLogo
+	else :
+		draw.rectangle( (0,0,319,31), fill=(0, (3*frame+100)%255, (10*frame+30)%255), outline=(0,0,0))
+
 	return image
 
 def LightSingleSimonColor(color) : 
@@ -116,7 +116,7 @@ def CheckSimonColors(simonColors, playerColors) :
 
 #Overall Control Variables
 frame = 0
-mode = 0
+mode = 2
 
 #Game Variables
 colorList = []
@@ -127,7 +127,7 @@ simonState = 0 # 0 - Add new Color.. # 1 - Display Colors # 2 - Take User input 
 lastUserInputTime = 0
 
 image = Image.new("RGB", (320, 32))
-#image = Image.open("digikeyx10.png")
+digiKeyLogoImage = Image.open("digikeyx10.png")
 draw = ImageDraw.Draw(image)
 image = GetTestImage()
 
@@ -148,6 +148,7 @@ while 1:
 	if time.time() - lastDrawTime > 0.03 :
 		matrix.DrawLEDMemory()
 		lastDrawTime = time.time()
+		frame = frame + 1
 
 	circuitPlayground.Read()
 
@@ -189,9 +190,13 @@ while 1:
 			inputColors = []
 			simonState = 0
 			frame = 0
+	elif mode == 2 :
+		matrix.SetImage( GetAttractModeImage(frame, digiKeyLogoImage), 0, 0)
+		if frame > 600 :
+			frame = 0
 
 		
-	frame = frame + 1
+
 
 	
 

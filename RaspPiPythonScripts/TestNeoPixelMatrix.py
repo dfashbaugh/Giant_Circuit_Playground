@@ -127,7 +127,7 @@ def CheckSimonColors(simonColors, playerColors) :
 #Overall Control Variables
 frame = 0
 lastDrawTime = 0
-mode = 2 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter
+mode = 4 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter, Mode = 4 : Secret Test Image
 circuitPlayGroundType = 1 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
 matrixType = 2 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrixType = 2 : NeoPixel 8X8
 circuitPlaygroundPort = '/dev/cu.usbmodem1411'
@@ -219,8 +219,12 @@ while 1:
 		if frame > 600 :
 			frame = 0
 
-	else :
+	elif mode == 3 :
 		image = GetSoundReactiveImage(circuitPlayground.Sound)
+		matrix.SetImage(image, 0, 0)
+
+	else :
+		image = GetTestImage()
 		matrix.SetImage(image, 0, 0)
 
 	frame = frame + 1

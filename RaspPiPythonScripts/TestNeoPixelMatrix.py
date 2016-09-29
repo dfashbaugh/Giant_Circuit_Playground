@@ -70,6 +70,16 @@ def GetAttractModeImage(frame, digiKeyLogo) :
 
 	return image
 
+def GetVJModeImage(Light, X, Y, Z) :
+	image = Image.new("RGB", (320, 32))
+	draw = ImageDraw.Draw(image)
+	brightness = float(Light)/1024
+	channel1Value = 128 + 12*int(X)
+	channel2Value = 128 + 12*int(Y)
+	channel3Value = 128 + 12*int(Z)
+	draw.rectangle( (0,0, 319, 31), fill = (int(brightness*channel1Value), int(brightness*channel2Value), int(brightness*channel3Value)), outline=(0,0,0))
+	return image
+
 def LightSingleSimonColor(color) : 
 	image = Image.new("RGB", (320,32))
 
@@ -116,7 +126,7 @@ def CheckSimonColors(simonColors, playerColors) :
 
 #Overall Control Variables
 frame = 0
-mode = 2
+mode = 3 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter
 
 #Game Variables
 colorList = []
@@ -136,8 +146,8 @@ lastDrawTime = 0
 #circuitPlayground = CircuitPlayGround('/dev/cu.usbmodem1411')
 circuitPlayground = SimulationPlayGround()
 
-matrix = NeoPixelMatrix('/dev/cu.usbmodem2115241')
-#matrix = SimulationMatrix()
+#matrix = NeoPixelMatrix('/dev/cu.usbmodem2115241')
+matrix = SimulationMatrix()
 #matrix = RGBMatrix(32, 10, 1)
 
 matrix.Clear()
@@ -152,15 +162,10 @@ while 1:
 
 	circuitPlayground.Read()
 
-	#First Interactive Mode
-	#brightness = float((circuitPlayground.Light))/1024
-	#channel1Value = 128 + 12*int(circuitPlayground.X)
-	#channel2Value = 128 + 12*int(circuitPlayground.Y)
-	#channel3Value = 128 + 12*int(CircuitPlayGround.Z)
-	#draw.rectangle( (0,0, 319, 31), fill = (int(brightness*channel1Value), int(brightness*channel2Value), int(brightness*channel3Value)), outline=(0,0,0))
-	#matrix.SetImage(image, 0, 0)
-
-	if mode == 1 :
+	if mode == 0 :
+		image = GetVJModeImage(circuitPlayground.Light, circuitPlayground.X, circuitPlayground.Y, circuitPlayground.Z)
+		matrix.SetImage(image, 0, 0)
+	elif mode == 1 :
 		#When ready for new color, set the ready for new color flag to 0 and the frame to 0
 		if simonState == 0 :
 			colorList.append(random.randrange(0,4))
@@ -194,6 +199,9 @@ while 1:
 		matrix.SetImage( GetAttractModeImage(frame, digiKeyLogoImage), 0, 0)
 		if frame > 600 :
 			frame = 0
+	else :
+		image = GetSoundReactiveImage(circuitPlayground.Sound)
+		matrix.SetImage(image, 0, 0)
 
 		
 

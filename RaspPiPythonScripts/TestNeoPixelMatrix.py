@@ -126,6 +126,7 @@ def CheckSimonColors(simonColors, playerColors) :
 
 #Overall Control Variables
 frame = 0
+lastDrawTime = 0
 mode = 3 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter
 circuitPlayGroundType = 0 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
 matrixType = 0 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrixType = 2 : NeoPixel 8X8
@@ -140,13 +141,14 @@ capacitorThreshold = 100
 simonState = 0 # 0 - Add new Color.. # 1 - Display Colors # 2 - Take User input # 3 - Lose
 lastUserInputTime = 0
 
+# Image Preprocessing
 image = Image.new("RGB", (320, 32))
 digiKeyLogoImage = Image.open("digikeyx10.png")
 draw = ImageDraw.Draw(image)
 image = GetTestImage()
 
-lastDrawTime = 0
- 
+
+# Initialize the Hardware!
 if circuitPlayGroundType == 0 :
 	circuitPlayground = SimulationPlayGround()
 else :
@@ -158,6 +160,7 @@ elif matrixType == 1 :
 	matrix = RGBMatrix(32, 10, 1)
 else :
 	matrix = NeoPixelMatrix(neoPixelMatrixPort)
+
 
 matrix.Clear()
 matrix.SetImage(image, 0, 0)

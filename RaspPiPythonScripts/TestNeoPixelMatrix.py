@@ -116,6 +116,7 @@ def CheckSimonColors(simonColors, playerColors) :
 
 #Overall Control Variables
 frame = 0
+mode = 0
 
 #Game Variables
 colorList = []
@@ -158,35 +159,36 @@ while 1:
 	#draw.rectangle( (0,0, 319, 31), fill = (int(brightness*channel1Value), int(brightness*channel2Value), int(brightness*channel3Value)), outline=(0,0,0))
 	#matrix.SetImage(image, 0, 0)
 
-	#When ready for new color, set the ready for new color flag to 0 and the frame to 0
-	if simonState == 0 :
-		colorList.append(random.randrange(0,4))
-		frame = 0
-		simonState = 1
-
-	elif simonState == 1 :
-		if frame == framesPerColor*len(colorList) : 
-			matrix.Clear()
-			simonState = 2
+	if mode == 1 :
+		#When ready for new color, set the ready for new color flag to 0 and the frame to 0
+		if simonState == 0 :
+			colorList.append(random.randrange(0,4))
+			frame = 0
+			simonState = 1
+	
+		elif simonState == 1 :
+			if frame == framesPerColor*len(colorList) : 
+				matrix.Clear()
+				simonState = 2
+			else :
+				matrix.SetImage(LightSimonColors(colorList, frame, framesPerColor), 0, 0)
+	
+		elif simonState == 2 :
+			newColor = ProcessSimonUserInput(circuitPlayground.Cap10, circuitPlayground.Cap9, circuitPlayground.Cap6, circuitPlayground.Cap12, circuitPlayground.Cap3, circuitPlayground.Cap2, circuitPlayground.Cap0, circuitPlayground.Cap1, capacitorThreshold)
+			if newColor >= 0 and newColor<=3 and time.time() - lastUserInputTime > 1.0:
+				lastUserInputTime = time.time()
+				matrix.SetImage(LightSingleSimonColor(newColor), 0, 0)
+				inputColors.append(newColor)
+				if CheckSimonColors(colorList, inputColors) == 0 :
+					simonState = 3
+				elif CheckSimonColors(colorList, inputColors) == 2 :
+					simonState = 0
+	
 		else :
-			matrix.SetImage(LightSimonColors(colorList, frame, framesPerColor), 0, 0)
-
-	elif simonState == 2 :
-		newColor = ProcessSimonUserInput(circuitPlayground.Cap10, circuitPlayground.Cap9, circuitPlayground.Cap6, circuitPlayground.Cap12, circuitPlayground.Cap3, circuitPlayground.Cap2, circuitPlayground.Cap0, circuitPlayground.Cap1, capacitorThreshold)
-		if newColor >= 0 and newColor<=3 and time.time() - lastUserInputTime > 1.0:
-			lastUserInputTime = time.time()
-			matrix.SetImage(LightSingleSimonColor(newColor), 0, 0)
-			inputColors.append(newColor)
-			if CheckSimonColors(colorList, inputColors) == 0 :
-				simonState = 3
-			elif CheckSimonColors(colorList, inputColors) == 2 :
-				simonState = 0
-
-	else :
-		colorList = []
-		inputColors = []
-		simonState = 0
-		frame = 0
+			colorList = []
+			inputColors = []
+			simonState = 0
+			frame = 0
 
 		
 	frame = frame + 1

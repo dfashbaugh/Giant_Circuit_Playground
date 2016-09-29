@@ -22,6 +22,7 @@ class CircuitPlayGround:
 	Cap10 = 0
 	Cap6 = 0
 	Cap12 = 0
+	Mode = 0
 
 	def __init__(self, SerialPort):
 		self.ser.baudrate = 9600
@@ -33,7 +34,7 @@ class CircuitPlayGround:
 	def Read(self):
 		theString = self.ser.readline()
 		myList = theString.split('	')
-		if len(myList) == 17 :
+		if len(myList) == 18 :
 			self.X = float(myList[0])
 			self.Y = float(myList[1])
 			self.Z = float(myList[2])
@@ -51,4 +52,5 @@ class CircuitPlayGround:
 			self.Cap10 = int(myList[14])
 			self.Cap6 = int(myList[15])
 			self.Cap12 = int(myList[16])
+			self.Mode = int(myList[17])
 		return theString

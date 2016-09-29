@@ -128,9 +128,9 @@ def CheckSimonColors(simonColors, playerColors) :
 frame = 0
 lastDrawTime = 0
 mode = 3 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter
-circuitPlayGroundType = 0 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
+circuitPlayGroundType = 1 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
 matrixType = 0 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrixType = 2 : NeoPixel 8X8
-circuitPlaygroundPort = '/dev/cu.usbmodem1411'
+circuitPlaygroundPort = '/dev/cu.usbmodem1451'
 neoPixelMatrixPort = '/dev/cu.usbmodem2115241'
 
 #Game Variables
@@ -177,6 +177,7 @@ while 1:
 			lastDrawTime = time.time()
 			
 	circuitPlayground.Read()
+	mode = circuitPlayground.Mode
 
 	if mode == 0 :
 		image = GetVJModeImage(circuitPlayground.Light, circuitPlayground.X, circuitPlayground.Y, circuitPlayground.Z)

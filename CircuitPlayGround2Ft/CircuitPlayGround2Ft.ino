@@ -13,6 +13,10 @@ int cap_1, cap_0; //Bot left
 int cap_9, cap_10; //Top right
 int cap_6, cap_12; //Bot right
 
+int mode = 2;
+int cyclesUntilPush = 2;
+int curCycles = 0;
+
 bool slideSwitch, L_button, R_button;
 
 String delim = "\t";
@@ -33,6 +37,39 @@ void loop() {
 
   L_button = CircuitPlayground.leftButton(); //0 Unless pressed
   R_button = CircuitPlayground.rightButton();
+
+  curCycles++;
+  if(L_button && curCycles > cyclesUntilPush)
+  {
+    mode--;
+    if(mode == -1)
+      mode = 3;
+    mode = mode%4;
+    curCycles = 0;
+    if(mode == 0)
+      CircuitPlayground.playTone(800, 100);
+    else if(mode == 1)
+      CircuitPlayground.playTone(1000, 100);
+    else if(mode == 2)
+      CircuitPlayground.playTone(1200, 100);
+    else if(mode == 3)
+      CircuitPlayground.playTone(1600, 100);
+  }
+  else if(R_button && curCycles > cyclesUntilPush)
+  {
+    mode++;
+    mode = mode%4;
+    curCycles = 0;
+    if(mode == 0)
+      CircuitPlayground.playTone(800, 100);
+    else if(mode == 1)
+      CircuitPlayground.playTone(1000, 100);
+    else if(mode == 2)
+      CircuitPlayground.playTone(1200, 100);
+    else if(mode == 3)
+      CircuitPlayground.playTone(1600, 100);
+  }
+
 
   light = CircuitPlayground.lightSensor();
 
@@ -148,7 +185,10 @@ void loop() {
   Serial.print(cap_6);
   Serial.print(delim);
 
-  Serial.println(cap_12);
+  Serial.print(cap_12);
+  Serial.print(delim);
+
+  Serial.println(mode);
 
   delay(100);
 

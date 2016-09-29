@@ -164,17 +164,18 @@ matrix.SetImage(image, 0, 0)
 
 while 1:
 	# Define the frame rate for the whole system.. Only for Neo Pixel
-	if time.time() - lastDrawTime > 0.03 :
-		matrix.DrawLEDMemory()
-		lastDrawTime = time.time()
-		frame = frame + 1
+	if matrixType > 1 :
+		if time.time() - lastDrawTime > 0.03 :
+			matrix.DrawLEDMemory()
+			lastDrawTime = time.time()
+			frame = frame + 1
 
 	circuitPlayground.Read()
 
 	if mode == 0 :
 		image = GetVJModeImage(circuitPlayground.Light, circuitPlayground.X, circuitPlayground.Y, circuitPlayground.Z)
 		matrix.SetImage(image, 0, 0)
-		
+
 	elif mode == 1 :
 		#When ready for new color, set the ready for new color flag to 0 and the frame to 0
 		if simonState == 0 :

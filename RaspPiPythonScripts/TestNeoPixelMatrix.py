@@ -162,14 +162,17 @@ else :
 matrix.Clear()
 matrix.SetImage(image, 0, 0)
 
+
+#The main loop where all the magic happens
+#
+#
 while 1:
 	# Define the frame rate for the whole system.. Only for Neo Pixel
 	if matrixType > 1 :
 		if time.time() - lastDrawTime > 0.03 :
 			matrix.DrawLEDMemory()
 			lastDrawTime = time.time()
-			frame = frame + 1
-
+			
 	circuitPlayground.Read()
 
 	if mode == 0 :
@@ -216,8 +219,7 @@ while 1:
 		image = GetSoundReactiveImage(circuitPlayground.Sound)
 		matrix.SetImage(image, 0, 0)
 
-		
-
+	frame = frame + 1
 
 	
 

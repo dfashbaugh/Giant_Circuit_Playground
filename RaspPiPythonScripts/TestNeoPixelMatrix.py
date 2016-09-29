@@ -174,7 +174,7 @@ matrix.SetImage(image, 0, 0)
 while 1:
 	# Define the frame rate for the whole system.. Only for Neo Pixel
 	if matrixType > 1 :
-		if time.time() - lastDrawTime > 0.03 :
+		if time.time() - lastDrawTime > 0.2 :
 			matrix.DrawLEDMemory()
 			lastDrawTime = time.time()
 			

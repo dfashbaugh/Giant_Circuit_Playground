@@ -30,13 +30,13 @@ def GetTestImage() :
 def GetSimonRedImage() :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	draw.rectangle((0, 0, 63, 31), fill=(255, 0, 0), outline=(255,0,0))
+	draw.rectangle((256, 0, 319, 31), fill=(255, 0, 0), outline=(255,0,0))
 	return image
 
 def GetSimonBlueImage() :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	draw.rectangle((64, 0, 127, 31), fill=(0, 0, 255), outline=(0,0,255))
+	draw.rectangle((96, 0, 159, 31), fill=(0, 0, 255), outline=(0,0,255))
 	return image
 
 def GetSimonGreenImage() :
@@ -48,7 +48,13 @@ def GetSimonGreenImage() :
 def GetSimonYellowImage() :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	draw.rectangle((224, 0, 287, 31), fill=(255, 255, 0), outline=(255,255,0))
+	draw.rectangle((0, 0, 63, 31), fill=(255, 255, 0), outline=(255,255,0))
+	return image
+
+def GetSimonBlackImage() :
+	image = Image.new("RGB", (320, 32))
+	draw = ImageDraw.Draw(image)
+	draw.rectangle((0, 0, 319, 31), fill=(0, 0, 0), outline=(0,0,0))
 	return image
 
 def GetSoundReactiveImage(sound) :
@@ -105,15 +111,17 @@ def LightSimonColors(colorList, frame, framesPerColor) :
 	curColorAddr = frame/framesPerColor
 	myColor = colorList[curColorAddr]
 
+	if frame + 5 > framesPerColor + (frame/framesPerColor)*framesPerColor :
+		return GetSimonBlackImage()
 	return LightSingleSimonColor(myColor)
 
 def ProcessSimonUserInput(cap10, cap9, cap6, cap12, cap3, cap2, cap0, cap1, capacitorThreshold) :
 
-	if cap10 > capacitorThreshold or cap9 > capacitorThreshold :
+	if cap2 > capacitorThreshold or cap3 > capacitorThreshold :
 		return 0
-	elif cap6 > capacitorThreshold or cap12 > capacitorThreshold :
+	elif cap9 > capacitorThreshold or cap10 > capacitorThreshold :
 		return 1
-	elif cap3 > capacitorThreshold or cap2 > capacitorThreshold :
+	elif cap6 > capacitorThreshold or cap12 > capacitorThreshold :
 		return 2
 	elif cap0 > capacitorThreshold or cap1 > capacitorThreshold :
 		return 3
@@ -143,7 +151,7 @@ neoPixelMatrixPort = '/dev/serial0'
 
 #Game Variables
 colorList = []
-framesPerColor = 300
+framesPerColor = 15
 inputColors = []
 capacitorThreshold = 100
 simonState = 0 # 0 - Add new Color.. # 1 - Display Colors # 2 - Take User input # 3 - Lose
@@ -187,13 +195,18 @@ while 1:
 	circuitPlayground.Read()
 	mode = circuitPlayground.Mode
 
+	if mode != 1 :
+		colorList = []
+		inputColors = []
+		simonState = 0
+
 	if mode == 0 :
 		image = GetVJModeImage(circuitPlayground.Light, circuitPlayground.X, circuitPlayground.Y, circuitPlayground.Z)
 		matrix.SetImage(image, 0, 0)
 
 	elif mode == 1 :
 		#When ready for new color, set the ready for new color flag to 0 and the frame to 0
-		if simonState == 0 :
+		if simonState == 0 : #New 
 			colorList.append(random.randrange(0,4))
 			frame = 0
 			simonState = 1
@@ -201,6 +214,7 @@ while 1:
 		elif simonState == 1 :
 			if frame == framesPerColor*len(colorList) : 
 				matrix.Clear()
+				inputColors = []
 				simonState = 2
 			else :
 				matrix.SetImage(LightSimonColors(colorList, frame, framesPerColor), 0, 0)
@@ -208,14 +222,30 @@ while 1:
 		elif simonState == 2 :
 			newColor = ProcessSimonUserInput(circuitPlayground.Cap10, circuitPlayground.Cap9, circuitPlayground.Cap6, circuitPlayground.Cap12, circuitPlayground.Cap3, circuitPlayground.Cap2, circuitPlayground.Cap0, circuitPlayground.Cap1, capacitorThreshold)
 			if newColor >= 0 and newColor<=3 and time.time() - lastUserInputTime > 1.0:
-				lastUserInputTime = time.time()
 				matrix.SetImage(LightSingleSimonColor(newColor), 0, 0)
 				inputColors.append(newColor)
-				if CheckSimonColors(colorList, inputColors) == 0 :
-					simonState = 3
-				elif CheckSimonColors(colorList, inputColors) == 2 :
+				simonState = 3
+
+		elif simonState == 3 :
+			newColor = ProcessSimonUserInput(circuitPlayground.Cap10, circuitPlayground.Cap9, circuitPlayground.Cap6, circuitPlayground.Cap12, circuitPlayground.Cap3, circuitPlayground.Cap2, circuitPlayground.Cap0, circuitPlayground.Cap1, capacitorThreshold)
+			if newColor > 3 :
+				matrix.Clear() 
+				simonResult = CheckSimonColors(colorList, inputColors)
+				if simonResult == 0 :
+					simonState = 4
+					frame = 0
+				elif simonResult == 2 :
 					simonState = 0
-	
+				else :
+					simonState = 2
+
+		elif simonState == 4 :
+			draw = ImageDraw.Draw(image)
+			draw.rectangle( (0,0, 319, 31), fill = (255,0,0), outline=(0,0,0))
+			matrix.SetImage(image, 0, 0)
+			if frame > 50 :
+				simonState = 5
+
 		else :
 			colorList = []
 			inputColors = []

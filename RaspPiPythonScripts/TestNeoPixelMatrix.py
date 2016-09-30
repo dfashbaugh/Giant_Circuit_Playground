@@ -61,10 +61,18 @@ def GetSimonBlackImage() :
 def GetSoundReactiveImage(sound) :
 
 	sound = 255-sound
-
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	draw.rectangle((0, 0, 319, 31), fill=(sound, 0, 0), outline=(0,0,0))
+	draw.rectangle( (0,0, 319, 31), fill=(0,0,0), outline=(0,0,0))
+	px = image.load()
+
+	for x in range(0, 320) :
+		for y in range(0, 32) :
+			px[x,y] = GetRGBFromWheel(map(x, 0, 320, 0, 255))
+
+	startPos = map(sound, 0, 255, 0, 320)
+	draw.rectangle( (320-startPos, 0, 320, 31), fill=(0,0,0), outline =(0,0,0))
+
 	return image
 
 def GetAttractModeImage(frame, digiKeyLogo) :
@@ -145,6 +153,21 @@ def GetFilledGreenImage(frame) :
 	draw = ImageDraw.Draw(image)
 	draw.rectangle( (0,0,16*frame,31), fill=(0, 255, 0,), outline=(0,0,0) )
 	return image
+
+def GetRGBFromWheel(WheelPos) :
+  WheelPos = 255 - WheelPos;
+  if WheelPos < 85 :
+    return (255-WheelPos*3, 0, WheelPos*3) 
+  
+  if WheelPos < 170 :
+    WheelPos -= 85;
+    return (0, WheelPos * 3, 255 - WheelPos * 3)
+
+  WheelPos -= 170;
+  return (WheelPos * 3, 255 - WheelPos * 3, 0)
+
+def map(x, fromLow, fromHigh, toLow, toHigh) :
+	return (x - fromLow) * (toHigh - toLow) / (fromHigh - fromLow) + toLow
 
 #Overall Control Variables
 frame = 0

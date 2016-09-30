@@ -150,8 +150,8 @@ def GetFilledGreenImage(frame) :
 frame = 0
 lastDrawTime = 0
 mode = 4 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter, Mode = 4 : Secret Test Image
-circuitPlayGroundType = 1 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
-matrixType = 3 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrixType = 2 : NeoPixel 8X8
+circuitPlayGroundType = 0 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
+matrixType = 0 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrixType = 2 : NeoPixel 8X8, MatrixType = 3 : Neo Pixel Ethernet
 #circuitPlaygroundPort = '/dev/cu.usbmodem1411'
 #neoPixelMatrixPort = '/dev/cu.usbmodem2115241'
 circuitPlaygroundPort = '/dev/ttyACM0'

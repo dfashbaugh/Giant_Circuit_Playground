@@ -58,9 +58,16 @@ def GetSimonBlackImage() :
 	return image
 
 def GetSoundReactiveImage(sound) :
+
+	sumSound = 0
+	for x in range(0, len(sound)) :
+		sumSound = sumSound + sound[x]
+
+	averageSound = sumSound/len(sound)
+
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	draw.rectangle((0, 0, 319, 31), fill=(sound, 0, 0), outline=(255,255,0))
+	draw.rectangle((0, 0, 319, 31), fill=(averageSound/4, 0, 0), outline=(0,0,0))
 	return image
 
 def GetAttractModeImage(frame, digiKeyLogo) :
@@ -149,6 +156,8 @@ matrixType = 2 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrix
 circuitPlaygroundPort = '/dev/ttyACM0'
 neoPixelMatrixPort = '/dev/serial0'
 
+soundList = []
+
 #Game Variables
 colorList = []
 framesPerColor = 15
@@ -194,6 +203,10 @@ while 1:
 			
 	circuitPlayground.Read()
 	mode = circuitPlayground.Mode
+
+	if len(soundList) > 8 :
+		soundList.pop(0)
+	soundList.append(circuitPlayground.Sound)
 
 	if mode != 1 :
 		colorList = []
@@ -258,7 +271,7 @@ while 1:
 			frame = 0
 
 	elif mode == 3 :
-		image = GetSoundReactiveImage(circuitPlayground.Sound)
+		image = GetSoundReactiveImage(soundList)
 		matrix.SetImage(image, 0, 0)
 
 	else :

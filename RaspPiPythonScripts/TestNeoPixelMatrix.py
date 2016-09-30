@@ -61,7 +61,13 @@ def GetAttractModeImage(frame, digiKeyLogo) :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
 
-	if frame > 200 :
+	if frame > 556 :
+		draw.rectangle( (0,0,319,31), fill=(0, 0, 2*((frame-810))%255), outline=(0,0,0) )
+	elif frame > 428 :
+		draw.rectangle( (0,0,319,31), fill=(0, 2*((frame-555))%255, 0,), outline=(0,0,0) )
+	elif frame > 300 :
+		draw.rectangle( (0,0,319,31), fill=(2*((frame-300))%255, 0, 0,), outline=(0,0,0) )
+	elif frame > 200 :
 		draw.rectangle( (frame%319, 0, (frame+31)%319, 31), fill=(255, 0, 0), outline=(0,0,0))
 	elif frame > 100 :
 		image = digiKeyLogo
@@ -218,7 +224,7 @@ while 1:
 
 	elif mode == 2 :
 		matrix.SetImage( GetAttractModeImage(frame, digiKeyLogoImage), 0, 0)
-		if frame > 600 :
+		if frame > 684 :
 			frame = 0
 
 	elif mode == 3 :

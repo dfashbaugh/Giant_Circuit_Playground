@@ -88,11 +88,9 @@ def GetAttractModeImage(frame, digiKeyLogo) :
 def GetVJModeImage(Light, X, Y, Z) :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	brightness = float(Light)/1024
-	channel1Value = 128 + 12*int(X)
-	channel2Value = 128 + 12*int(Y)
-	channel3Value = 128 + 12*int(Z)
-	draw.rectangle( (0,0, 319, 31), fill = (int(brightness*channel1Value), int(brightness*channel2Value), int(brightness*channel3Value)), outline=(0,0,0))
+	channel1Value = 128 + int(X*12)
+	channel2Value = 128 + int(Y*12)
+	draw.rectangle( (0,0, 319, 31), fill = (channel1Value, channel2Value, 120), outline=(0,0,0))
 	return image
 
 def LightSingleSimonColor(color) : 

@@ -223,7 +223,7 @@ void loop() {
     CircuitPlayground.setPixelColor(8, yellowValue,   yellowValue,   0);
     CircuitPlayground.setPixelColor(9, yellowValue,   yellowValue,   0);
   }
-  else if(mode == 2)
+  else if(mode == 2 || mode == 0)
   {
     int colorValue = 0;
     if(animationFrame > 25)

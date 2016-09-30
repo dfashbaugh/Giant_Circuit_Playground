@@ -24,6 +24,8 @@ int soundCounter = 0;
 
 int lastRead = 0;
 
+int animationFrame = 0;
+
 String delim = "\t";
 
 #define MIC_PIN         A4  // Microphone is attached to this analog pin (A4 for circuit playground)
@@ -162,58 +164,85 @@ void loop() {
   cap_6 = CircuitPlayground.readCap(6); 
   cap_12 = CircuitPlayground.readCap(12); 
 
-  int redValue = (cap_2+cap_3);
-  if(redValue > 255) 
-    redValue = 255;
-  if(redValue > 100 && !playedSoundRed)
+  if(mode == 1)
   {
-    CircuitPlayground.playTone(800, 100);
-    playedSoundRed = true;
-  }
-  else if(redValue < 10)
-    playedSoundRed = false;
-  CircuitPlayground.setPixelColor(0, redValue,   0,   0);
-  CircuitPlayground.setPixelColor(1, redValue,   0,   0);
+    for(int i = 0; i < 10; i++)
+    {
+      CircuitPlayground.setPixelColor(i, 0,   0,   0);
+    }
 
-  int greenValue = (cap_0+cap_1);
-  if(greenValue > 255)
-    greenValue = 255;
-  if(greenValue > 100 && !playedSoundGreen)
+    int redValue = (cap_2+cap_3);
+    if(redValue > 255) 
+      redValue = 255;
+    if(redValue > 200 && !playedSoundRed)
+    {
+      CircuitPlayground.playTone(800, 100);
+      playedSoundRed = true;
+    }
+    else if(redValue < 10)
+      playedSoundRed = false;
+    CircuitPlayground.setPixelColor(0, redValue,   0,   0);
+    CircuitPlayground.setPixelColor(1, redValue,   0,   0);
+  
+    int greenValue = (cap_0+cap_1);
+    if(greenValue > 255)
+      greenValue = 255;
+    if(greenValue > 200 && !playedSoundGreen)
+    {
+      CircuitPlayground.playTone(800, 100);
+      playedSoundGreen = true;
+    }
+    else if(greenValue < 10)
+      playedSoundGreen = false;
+    CircuitPlayground.setPixelColor(3, 0,   greenValue,   0);
+    CircuitPlayground.setPixelColor(4, 0,   greenValue,   0);
+  
+    int blueValue = (cap_6+cap_12);
+    if(blueValue > 255)
+      blueValue = 255;
+    if(blueValue > 200 && !playedSoundBlue)
+    {
+      CircuitPlayground.playTone(800, 100);
+      playedSoundBlue = true;
+    }
+    else if(blueValue < 10)
+      playedSoundBlue = false;
+    CircuitPlayground.setPixelColor(5, 0,   0,   blueValue);
+    CircuitPlayground.setPixelColor(6, 0,   0,   blueValue);
+  
+    int yellowValue = (cap_9+cap_10);
+    if(yellowValue > 255)
+      yellowValue = 255;
+    if(yellowValue > 200 && !playedSoundYellow)
+    {
+      CircuitPlayground.playTone(800, 100);
+      playedSoundYellow = true;
+    }
+    else if(yellowValue < 10)
+      playedSoundYellow = false;
+    CircuitPlayground.setPixelColor(8, yellowValue,   yellowValue,   0);
+    CircuitPlayground.setPixelColor(9, yellowValue,   yellowValue,   0);
+  }
+  else if(mode == 2 || mode == 0)
   {
-    CircuitPlayground.playTone(800, 100);
-    playedSoundGreen = true;
-  }
-  else if(greenValue < 10)
-    playedSoundGreen = false;
-  CircuitPlayground.setPixelColor(3, 0,   greenValue,   0);
-  CircuitPlayground.setPixelColor(4, 0,   greenValue,   0);
+    int colorValue = 0;
+    if(animationFrame > 25)
+      colorValue = 255 - (animationFrame*10)%255;
+    else
+      colorValue = (animationFrame*10)%255;
 
-  int blueValue = (cap_6+cap_12);
-  if(blueValue > 255)
-    blueValue = 255;
-  if(blueValue > 100 && !playedSoundBlue)
+    for(int i = 0; i < 10; i++)
+    {
+      CircuitPlayground.setPixelColor(i, colorValue,   colorValue,   colorValue);
+    }
+  }
+  else if(mode == 3)
   {
-    CircuitPlayground.playTone(800, 100);
-    playedSoundBlue = true;
+    for(int i = 0; i < 10; i++)
+    {
+      CircuitPlayground.setPixelColor(i, 255-sound,   0,   0);
+    }
   }
-  else if(blueValue < 10)
-    playedSoundBlue = false;
-  CircuitPlayground.setPixelColor(5, 0,   0,   blueValue);
-  CircuitPlayground.setPixelColor(6, 0,   0,   blueValue);
-
-  int yellowValue = (cap_9+cap_10);
-  if(yellowValue > 255)
-    yellowValue = 255;
-  if(yellowValue > 100 && !playedSoundYellow)
-  {
-    CircuitPlayground.playTone(800, 100);
-    playedSoundYellow = true;
-  }
-  else if(yellowValue < 10)
-    playedSoundYellow = false;
-  CircuitPlayground.setPixelColor(8, yellowValue,   yellowValue,   0);
-  CircuitPlayground.setPixelColor(9, yellowValue,   yellowValue,   0);
-
 
   Serial.print(X);
   Serial.print(delim);
@@ -296,6 +325,10 @@ void loop() {
   //Scale the input logarithmically instead of linearly
   sound = fscale(INPUT_FLOOR, INPUT_CEILING, 10, 0, peakToPeak, 2);
   sound = map(sound, 0,10, 0, 255);
+
+  animationFrame++;
+  if(animationFrame > 50)
+    animationFrame = 0;
 
 }
 

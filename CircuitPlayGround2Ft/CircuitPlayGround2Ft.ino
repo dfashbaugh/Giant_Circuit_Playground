@@ -19,7 +19,86 @@ int curCycles = 0;
 
 bool slideSwitch, L_button, R_button;
 
+int soundList [1000];
+int soundCounter = 0;
+
+int lastRead = 0;
+
 String delim = "\t";
+
+#define MIC_PIN         A4  // Microphone is attached to this analog pin (A4 for circuit playground)
+#define SAMPLE_WINDOW   10  // Sample window for average level
+#define PEAK_HANG       24  // Time of pause before peak dot falls
+#define PEAK_FALL        4  // Rate of falling peak dot
+#define INPUT_FLOOR     10  // Lower range of analogRead input
+#define INPUT_CEILING  500  // Max range of analogRead 
+
+
+float fscale( float originalMin, float originalMax, float newBegin, float
+newEnd, float inputValue, float curve){
+
+  float OriginalRange = 0;
+  float NewRange = 0;
+  float zeroRefCurVal = 0;
+  float normalizedCurVal = 0;
+  float rangedValue = 0;
+  boolean invFlag = 0;
+
+
+  // condition curve parameter
+  // limit range
+
+  if (curve > 10) curve = 10;
+  if (curve < -10) curve = -10;
+
+  curve = (curve * -.1) ; // - invert and scale - this seems more intuitive - postive numbers give more weight to high end on output 
+  curve = pow(10, curve); // convert linear scale into lograthimic exponent for other pow function
+
+  /*
+   Serial.println(curve * 100, DEC);   // multply by 100 to preserve resolution  
+   Serial.println(); 
+   */
+
+  // Check for out of range inputValues
+  if (inputValue < originalMin) {
+    inputValue = originalMin;
+  }
+  if (inputValue > originalMax) {
+    inputValue = originalMax;
+  }
+
+  // Zero Refference the values
+  OriginalRange = originalMax - originalMin;
+
+  if (newEnd > newBegin){ 
+    NewRange = newEnd - newBegin;
+  }
+  else
+  {
+    NewRange = newBegin - newEnd; 
+    invFlag = 1;
+  }
+
+  zeroRefCurVal = inputValue - originalMin;
+  normalizedCurVal  =  zeroRefCurVal / OriginalRange;   // normalize to 0 - 1 float
+
+  // Check for originalMin > originalMax  - the math for all other cases i.e. negative numbers seems to work out fine 
+  if (originalMin > originalMax ) {
+    return 0;
+  }
+
+  if (invFlag == 0){
+    rangedValue =  (pow(normalizedCurVal, curve) * NewRange) + newBegin;
+
+  }
+  else     // invert the ranges
+  {   
+    rangedValue =  newBegin - (pow(normalizedCurVal, curve) * NewRange); 
+  }
+
+  return rangedValue;
+}
+
 
 void setup() {
   Serial.begin(9600);
@@ -27,6 +106,7 @@ void setup() {
 }
 
 void loop() {
+
   X = CircuitPlayground.motionX();
   Y = CircuitPlayground.motionY();
   Z = CircuitPlayground.motionZ();
@@ -72,8 +152,6 @@ void loop() {
 
 
   light = CircuitPlayground.lightSensor();
-
-  sound = CircuitPlayground.soundSensor();
 
   cap_2 = CircuitPlayground.readCap(2); 
   cap_3 = CircuitPlayground.readCap(3); 
@@ -190,7 +268,35 @@ void loop() {
 
   Serial.println(mode);
 
-  delay(100);
+  unsigned int signalMax = 0;
+  unsigned int sample = 0;
+  unsigned int peakToPeak = 0;
+  unsigned int signalMin = 1023;
+  unsigned int c, y;
+  unsigned long startMillis = millis();
+
+  // collect data for length of sample window (in mS)
+  while (millis() - startMillis < 100)
+  {
+    sample = analogRead(MIC_PIN);
+    if (sample < 1024)  // toss out spurious readings
+    {
+      if (sample > signalMax)
+      {
+        signalMax = sample;  // save just the max levels
+      }
+      else if (sample < signalMin)
+      {
+        signalMin = sample;  // save just the min levels
+      }
+    }
+  }
+  peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
+
+  //Scale the input logarithmically instead of linearly
+  sound = fscale(INPUT_FLOOR, INPUT_CEILING, 10, 0, peakToPeak, 2);
+  sound = map(sound, 0,10, 0, 255);
 
 }
+
 

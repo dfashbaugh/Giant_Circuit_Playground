@@ -79,16 +79,27 @@ def GetAttractModeImage(frame, digiKeyLogo) :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
 
-	if frame > 612 :
+	if frame > 740 :
+		px = image.load()
+		for x in range(0, 320) :
+			for y in range(0, 32) :
+				px[x,y] = GetRGBFromWheel(map(x, 0, 320, 0, 255) + frame%255)
+
+	elif frame > 612 :
 		draw.rectangle( (0,0,319,31), fill=(0, 0, 2*((frame-612))%255), outline=(0,0,0) )
+
 	elif frame > 486 :
 		draw.rectangle( (0,0,319,31), fill=(0, 2*((frame-486))%255, 0,), outline=(0,0,0) )
+
 	elif frame > 360 :
 		draw.rectangle( (0,0,319,31), fill=(2*((frame-360))%255, 0, 0,), outline=(0,0,0) )
+
 	elif frame > 200 :
 		draw.rectangle( (0, 0, 2*((frame-200))%319, 31), fill=(255, (frame-200)%255, 0), outline=(0,0,0))
+	
 	elif frame > 100 :
 		image = digiKeyLogo
+
 	else :
 		draw.rectangle( (0,0,319,31), fill=(0, (3*frame+100)%255, (10*frame+30)%255), outline=(0,0,0))
 
@@ -194,7 +205,6 @@ digiKeyLogoImage = Image.open("digikeyx10.png")
 draw = ImageDraw.Draw(image)
 image = GetTestImage()
 
-
 # Initialize the Hardware!
 if circuitPlayGroundType == 0 :
 	circuitPlayground = SimulationPlayGround()
@@ -296,7 +306,7 @@ while 1:
 
 	elif mode == 2 :
 		matrix.SetImage( GetAttractModeImage(frame, digiKeyLogoImage), 0, 0)
-		if frame > 740 :
+		if frame > 995 :
 			frame = 0
 
 	elif mode == 3 :

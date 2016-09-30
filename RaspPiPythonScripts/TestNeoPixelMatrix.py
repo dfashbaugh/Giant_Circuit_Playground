@@ -145,6 +145,12 @@ def CheckSimonColors(simonColors, playerColors) :
 
 	return 1
 
+def GetFilledGreenImage(frame) :
+	image = Image.new("RGB", (320, 32))
+	draw = ImageDraw.Draw(image)
+	draw.rectangle( (0,0,16*frame,31), fill=(0, 255, 0,), outline=(0,0,0) )
+	return image
+
 #Overall Control Variables
 frame = 0
 lastDrawTime = 0
@@ -222,7 +228,13 @@ while 1:
 		if simonState == 0 : #New 
 			colorList.append(random.randrange(0,4))
 			frame = 0
-			simonState = 1
+			simonState = 5
+
+		elif simonState == 5 :
+			matrix.SetImage(GetFilledGreenImage(frame), 0 ,0)
+			if frame > 20 :
+				simonState = 1
+				frame = 0
 	
 		elif simonState == 1 :
 			if frame == framesPerColor*len(colorList) : 
@@ -254,10 +266,13 @@ while 1:
 
 		elif simonState == 4 :
 			draw = ImageDraw.Draw(image)
-			draw.rectangle( (0,0, 319, 31), fill = (255,0,0), outline=(0,0,0))
+			if frame%2 == 0 :
+				draw.rectangle( (0,0, 319, 31), fill = (255,0,0), outline=(0,0,0))
+			else :
+				draw.rectangle( (0,0, 319, 31), fill = (0,0,0), outline=(0,0,0))
 			matrix.SetImage(image, 0, 0)
 			if frame > 50 :
-				simonState = 5
+				simonState = 6
 
 		else :
 			colorList = []

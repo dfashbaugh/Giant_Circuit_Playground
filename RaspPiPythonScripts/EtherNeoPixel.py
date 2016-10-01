@@ -1,18 +1,18 @@
-import serial
+import socket
 import time
 from PIL import Image
 
-class NeoPixelMatrix:
+class EtherNeoPixel:
+
+	#UDP_IP = "192.168.2.2"
+	#UDP_PORT = 8888
+	#sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 	MemorySize = 1920
-	ser = serial.Serial()
 	LEDMemory = [int]*MemorySize
 
-	def __init__(self, SerialPort):
-		self.ser.baudrate = 500000
-		self.ser.port = SerialPort
-		self.ser.open()
-		print 'Initialized NeoPixel Serial Port'
+	def __init__(self):
+		print 'Initialized Neo Socket'
  
 	def Clear(self) :
 		for x in range(0, self.MemorySize) :
@@ -60,13 +60,32 @@ class NeoPixelMatrix:
 			self.LEDMemory[memoryPos*3+2] = neoPix[pixelX, pixelY][2]
 
 	def DrawLEDMemory(self) :
-		self.ser.write('start'.encode())
-		for x in range(0, len(self.LEDMemory)) :
+		sendArr = []
+		sendArr.append('o')
+		sendArr.append('n')
+		for x in range(0, 900) :
 
 			if self.LEDMemory[x] > 255 :
 				self.LEDMemory[x] = 255
 			elif self.LEDMemory[x] < 0 :
 				self.LEDMemory[x] = 0
 
-			self.ser.write(chr(self.LEDMemory[x]))
-		return
+			sendArr.append(chr(self.LEDMemory[x]))
+		sendStr = "".join(sendArr)
+		UDP_IP = "192.168.2.2"
+		UDP_PORT = 8888
+		mySock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+		mySock.sendto(sendStr, (UDP_IP, UDP_PORT)) 
+		
+		sendArr = []
+		sendArr.append('t')
+		sendArr.append('w')
+		for x in range(900, 1920) :
+			if self.LEDMemory[x] > 255 :
+				self.LEDMemory[x] = 255
+			elif self.LEDMemory[x] < 0:
+				self.LEDMemory[x] = 0
+			sendArr.append(chr(self.LEDMemory[x]))
+		
+		sendStr = "".join(sendArr)
+		mySock.sendto(sendStr, (UDP_IP, UDP_PORT))

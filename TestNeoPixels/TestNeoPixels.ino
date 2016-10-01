@@ -55,7 +55,6 @@ void correctDrawingMemory()
 
 void setup()
 {
-	Serial.begin(500000);
 	LEDS.addLeds <OCTOWS2811> (leds, NUM_LEDS/8).setCorrection( 0x9FFAF0 );
    	FastLED.show();
 }
@@ -64,34 +63,21 @@ long lastMillis = 0;
 
 void loop ()
 {
-	if(Serial.available())
+
+	for(int i = 0; i < MEMORY_SIZE; i++)
 	{
-		byte recvInfo = Serial.read();
-
-		if(memoryCounter < REMOTE_MEMORY_SIZE)
-		{
-			recvInfo = map(recvInfo, 0, 255, 0, 128);
-			drawingMemory[memoryCounter] = recvInfo;
-			memoryCounter++;
-		}
-
-		CheckForDelimeter(recvInfo);
+		trueDrawingMemory[i] = i%255;
 	}
 
-	if(memoryCounter == REMOTE_MEMORY_SIZE)
-	{
-		correctDrawingMemory();
+    for(int i = 0; i < NUM_LEDS; i++ )
+    {
+    	CRGB myColor;
+    	myColor.green = trueDrawingMemory[i*3];
+    	myColor.red = trueDrawingMemory[i*3+1];
+    	myColor.blue = trueDrawingMemory[i*3+2];
+     	leds[i] = myColor;
+    }
 
-         for(int i = 0; i < NUM_LEDS; i++ )
-         {
-         	CRGB myColor;
-         	myColor.green = trueDrawingMemory[i*3];
-         	myColor.red = trueDrawingMemory[i*3+1];
-         	myColor.blue = trueDrawingMemory[i*3+2];
-          	leds[i] = myColor;
-         }
-
-         FastLED.show();
-	}
+    FastLED.show();
 }
 

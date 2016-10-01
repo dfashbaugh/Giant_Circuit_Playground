@@ -15,7 +15,6 @@ CRGB leds7[128];
 CRGB leds8[128];
 
 long memoryCounter = 0;
-boolean drawTime = false;
 
 int recvState = 0;
 void CheckForDelimeter(byte recvInfo)
@@ -32,7 +31,6 @@ void CheckForDelimeter(byte recvInfo)
 	{
 		recvState = 0;
 		memoryCounter = 0;
-		drawTime = false;
 	}
 	else
 		recvState = 0;
@@ -40,7 +38,7 @@ void CheckForDelimeter(byte recvInfo)
 
 void setup()
 {
-	Serial1.begin(500000);
+	Serial.begin(500000);
 	FastLED.addLeds<WS2812B, 2,  GRB>(leds1, 64);
     FastLED.addLeds<WS2812B, 14, GRB>(leds2, 64);
     FastLED.addLeds<WS2812B, 7,  GRB>(leds3, 64);
@@ -56,9 +54,9 @@ long lastMillis = 0;
 
 void loop ()
 {
-	if(Serial1.available())
+	if(Serial.available())
 	{
-		byte recvInfo = Serial1.read();
+		byte recvInfo = Serial.read();
 
 		if(memoryCounter < MEMORY_SIZE)
 		{
@@ -68,16 +66,20 @@ void loop ()
 		}
 
 		CheckForDelimeter(recvInfo);
-
-		if(memoryCounter == MEMORY_SIZE)
-		{
-			if(recvInfo == 'e')
-				drawTime = true;
-		}
 	}
 
-	if(memoryCounter == MEMORY_SIZE && drawTime)
+	if(memoryCounter == MEMORY_SIZE)
 	{
+		//correctDrawingMemory();
+
+         //for(int i = 0; i < NUM_LEDS; i++ )
+         //{
+         //	CRGB myColor;
+         //	myColor.green = trueDrawingMemory[i*3];
+         //	myColor.red = trueDrawingMemory[i*3+1];
+         //	myColor.blue = trueDrawingMemory[i*3+2];
+         // 	leds[i] = myColor;
+         //}
 
 		for(int i = 0; i < NUM_LEDS; i++)
 		{

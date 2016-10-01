@@ -20,6 +20,7 @@ class SimulationPlayGround:
 	Cap10 = 0
 	Cap6 = 0
 	Cap12 = 0
+	Mode = 2
 
 	def __init__(self):
 		print 'Initialized Simulation Playground Serial Port'

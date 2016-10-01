@@ -58,34 +58,20 @@ def GetSimonBlackImage() :
 	draw.rectangle((0, 0, 319, 31), fill=(0, 0, 0), outline=(0,0,0))
 	return image
 
-def GetSoundReactiveImage(sound) :
+def GetSoundReactiveImage(sound, rainbowImage) :
 
 	sound = 255-sound
-	image = Image.new("RGB", (320, 32))
+	image = rainbowImage.copy()
 	draw = ImageDraw.Draw(image)
-	draw.rectangle( (0,0, 319, 31), fill=(0,0,0), outline=(0,0,0))
-	px = image.load()
-
-	for x in range(0, 320) :
-		for y in range(0, 32) :
-			px[x,y] = GetRGBFromWheel(map(x, 0, 320, 0, 255))
-
 	startPos = map(sound, 0, 255, 0, 320)
-	draw.rectangle( (320-startPos, 0, 320, 31), fill=(0,0,0), outline =(0,0,0))
-
+	draw.rectangle( (startPos, 0, 320, 31), fill=(0,0,0), outline =(0,0,0))
 	return image
 
 def GetAttractModeImage(frame, digiKeyLogo) :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
 
-	if frame > 740 :
-		px = image.load()
-		for x in range(0, 320) :
-			for y in range(0, 32) :
-				px[x,y] = GetRGBFromWheel(map(x, 0, 320, 0, 255) + frame%255)
-
-	elif frame > 612 :
+	if frame > 612 :
 		draw.rectangle( (0,0,319,31), fill=(0, 0, 2*((frame-612))%255), outline=(0,0,0) )
 
 	elif frame > 486 :
@@ -183,7 +169,7 @@ def map(x, fromLow, fromHigh, toLow, toHigh) :
 #Overall Control Variables
 frame = 0
 lastDrawTime = 0
-mode = 4 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter, Mode = 4 : Secret Test Image
+mode = 3 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter, Mode = 4 : Secret Test Image
 circuitPlayGroundType = 0 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
 matrixType = 0 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrixType = 2 : NeoPixel 8X8, MatrixType = 3 : Neo Pixel Ethernet
 #circuitPlaygroundPort = '/dev/cu.usbmodem1411'
@@ -203,6 +189,15 @@ lastUserInputTime = 0
 image = Image.new("RGB", (320, 32))
 digiKeyLogoImage = Image.open("digikeyx10.png")
 draw = ImageDraw.Draw(image)
+
+rainbowImage = Image.new("RGB", (320, 32))
+draw = ImageDraw.Draw(rainbowImage)
+draw.rectangle( (0,0, 319, 31), fill=(0,0,0), outline=(0,0,0))
+px = rainbowImage.load()
+for x in range(0, 320) :
+	for y in range(0, 32) :
+		px[x,y] = GetRGBFromWheel(map(x, 0, 320, 0, 255))
+
 image = GetTestImage()
 
 # Initialize the Hardware!
@@ -306,11 +301,11 @@ while 1:
 
 	elif mode == 2 :
 		matrix.SetImage( GetAttractModeImage(frame, digiKeyLogoImage), 0, 0)
-		if frame > 995 :
+		if frame > 739 :
 			frame = 0
 
 	elif mode == 3 :
-		image = GetSoundReactiveImage(circuitPlayground.Sound)
+		image = GetSoundReactiveImage(circuitPlayground.Sound, rainbowImage)
 		matrix.SetImage(image, 0, 0)
 
 	else :

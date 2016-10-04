@@ -37,25 +37,25 @@ def GetSimonRedImage() :
 def GetSimonBlueImage() :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	draw.rectangle((96, 0, 159, 31), fill=(0, 0, 255), outline=(0,0,255))
+	draw.rectangle((96, 0, 159, 32), fill=(0, 0, 255), outline=(0,0,255))
 	return image
 
 def GetSimonGreenImage() :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	draw.rectangle((160, 0, 223, 31), fill=(0, 255, 0), outline=(0,255,0))
+	draw.rectangle((160, 0, 223, 32), fill=(0, 255, 0), outline=(0,255,0))
 	return image
 
 def GetSimonYellowImage() :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	draw.rectangle((0, 0, 63, 31), fill=(255, 255, 0), outline=(255,255,0))
+	draw.rectangle((0, 0, 63, 32), fill=(255, 255, 0), outline=(255,255,0))
 	return image
 
 def GetSimonBlackImage() :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	draw.rectangle((0, 0, 319, 31), fill=(0, 0, 0), outline=(0,0,0))
+	draw.rectangle((0, 0, 320, 32), fill=(0, 0, 0), outline=(0,0,0))
 	return image
 
 def GetSoundReactiveImage(sound, rainbowImage) :
@@ -72,22 +72,22 @@ def GetAttractModeImage(frame, digiKeyLogo) :
 	draw = ImageDraw.Draw(image)
 
 	if frame > 612 :
-		draw.rectangle( (0,0,319,31), fill=(0, 0, 2*((frame-612))%255), outline=(0,0,0) )
+		draw.rectangle( (0,0,320,32), fill=(0, 0, 2*((frame-612))%255), outline=(0,0,2*((frame-612))%255) )
 
 	elif frame > 486 :
-		draw.rectangle( (0,0,319,31), fill=(0, 2*((frame-486))%255, 0,), outline=(0,0,0) )
+		draw.rectangle( (0,0,320,32), fill=(0, 2*((frame-486))%255, 0,), outline=(0,2*((frame-486))%255,0) )
 
 	elif frame > 360 :
-		draw.rectangle( (0,0,319,31), fill=(2*((frame-360))%255, 0, 0,), outline=(0,0,0) )
+		draw.rectangle( (0,0,320,32), fill=(2*((frame-360))%255, 0, 0,), outline=(2*((frame-360))%255,0,0) )
 
 	elif frame > 200 :
-		draw.rectangle( (0, 0, 2*((frame-200))%319, 31), fill=(255, (frame-200)%255, 0), outline=(0,0,0))
+		draw.rectangle( (0, 0, 2*((frame-200))%320, 32), fill=(255, (frame-200)%255, 0), outline=(255,(frame-200)%255,0))
 	
 	elif frame > 100 :
 		image = digiKeyLogo
 
 	else :
-		draw.rectangle( (0,0,319,31), fill=(0, (3*frame+100)%255, (10*frame+30)%255), outline=(0,0,0))
+		draw.rectangle( (0,0,320,32), fill=(0, (3*frame+100)%255, (10*frame+30)%255), outline=(0,(3*frame+100)%255,(10*frame+30)%255))
 
 	return image
 
@@ -96,7 +96,7 @@ def GetVJModeImage(Light, X, Y, Z) :
 	draw = ImageDraw.Draw(image)
 	channel1Value = 128 + int(X*12)
 	channel2Value = 128 + int(Y*12)
-	draw.rectangle( (0,0, 319, 31), fill = (channel1Value, channel2Value, 120), outline=(0,0,0))
+	draw.rectangle( (0,0, 320, 32), fill = (channel1Value, channel2Value, 120), outline=(channel1Value, channel2Value, 120))
 	return image
 
 def LightSingleSimonColor(color) : 
@@ -148,7 +148,7 @@ def CheckSimonColors(simonColors, playerColors) :
 def GetFilledGreenImage(frame) :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	draw.rectangle( (0,0,16*frame,31), fill=(0, 255, 0,), outline=(0,0,0) )
+	draw.rectangle( (0,0,16*frame,32), fill=(0, 255, 0,), outline=(0,255,0) )
 	return image
 
 def GetRGBFromWheel(WheelPos) :
@@ -286,9 +286,9 @@ while 1:
 		elif simonState == 4 :
 			draw = ImageDraw.Draw(image)
 			if frame%2 == 0 :
-				draw.rectangle( (0,0, 319, 31), fill = (255,0,0), outline=(0,0,0))
+				draw.rectangle( (0,0, 320, 32), fill = (255,0,0), outline=(0,0,0))
 			else :
-				draw.rectangle( (0,0, 319, 31), fill = (0,0,0), outline=(0,0,0))
+				draw.rectangle( (0,0, 320, 32), fill = (0,0,0), outline=(0,0,0))
 			matrix.SetImage(image, 0, 0)
 			if frame > 50 :
 				simonState = 6

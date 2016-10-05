@@ -323,8 +323,8 @@ void loop() {
   peakToPeak = signalMax - signalMin;  // max - min = peak-peak amplitude
 
   //Scale the input logarithmically instead of linearly
-  sound = fscale(INPUT_FLOOR, INPUT_CEILING, 10, 0, peakToPeak, 2);
-  sound = map(sound, 0,10, 0, 255);
+  sound = fscale(INPUT_FLOOR, INPUT_CEILING, 100, 0, peakToPeak, 2);
+  sound = map(sound, 0,100, 0, 255);
 
   animationFrame++;
   if(animationFrame > 50)

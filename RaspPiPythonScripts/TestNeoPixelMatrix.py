@@ -3,12 +3,16 @@ import serial
 from NeoPixelMatrix import NeoPixelMatrix
 from CircuitPlayGround import CircuitPlayGround
 from EtherNeoPixel import EtherNeoPixel
-#from rgbmatrix import RGBMatrix
 from SimulationMatrix import SimulationMatrix
 from SimulationPlayGround import SimulationPlayGround
 from PIL import Image
 from PIL import ImageDraw
 import random
+
+SystemType = 3 #SystemType = 0 : 4 Foot Playground; SystemType = 1 : 2 Foot Playground
+
+if SystemType == 0 :
+	from rgbmatrix import RGBMatrix
 
 def GetTestImage() :
 	image = Image.new("RGB", (320, 32))
@@ -76,8 +80,9 @@ def GetAttractModeImage(frame, digiKeyLogo) :
 		draw.rectangle( (0,0, 319, 31), fill=(0,0,0), outline=(0,0,0))
 		px = image.load()
 		for x in range(0, 320) :
+			myColor = GetRGBFromWheel((map(x, 0, 320, 0, 255) + frame*3)%255)
 			for y in range(0, 32) :
-				px[x,y] = GetRGBFromWheel((map(x, 0, 320, 0, 255) + frame*3)%255)
+				px[x,y] = myColor
 
 	elif frame > 486 :
 		draw.rectangle( (0,0,320,32), fill=(0, 2*((frame-486))%255, 0,), outline=(0,2*((frame-486))%255,0) )
@@ -89,19 +94,31 @@ def GetAttractModeImage(frame, digiKeyLogo) :
 		draw.rectangle( (0, 0, 2*((frame-200))%320, 32), fill=(255, (frame-200)%255, 0), outline=(255,(frame-200)%255,0))
 	
 	elif frame > 100 :
-		image = digiKeyLogo
+		global SystemType
+		if SystemType == 0 :
+			image = digiKeyLogo
+		else :
+			draw.rectangle( (0,0,320,32), fill=(0, (3*frame+100)%255, (10*frame+30)%255), outline=(0,(3*frame+100)%255,(10*frame+30)%255))
 
 	else :
 		draw.rectangle( (0,0,320,32), fill=(0, (3*frame+100)%255, (10*frame+30)%255), outline=(0,(3*frame+100)%255,(10*frame+30)%255))
 
 	return image
 
-def GetVJModeImage(Light, X, Y, Z) :
+def GetVJModeImage(X, Y, Z) :
 	image = Image.new("RGB", (320, 32))
 	draw = ImageDraw.Draw(image)
-	channel1Value = 128 + int(X*12)
-	channel2Value = 128 + int(Y*12)
-	draw.rectangle( (0,0, 320, 32), fill = (channel1Value, channel2Value, 120), outline=(channel1Value, channel2Value, 120))
+	draw.rectangle( (0,0, 319, 31), fill=(0,0,0), outline=(0,0,0))
+
+	global frame
+	multiplier = int( (Y*10)/4 ) * -1
+	frame = frame+multiplier
+
+	px = image.load()
+	for x in range(0, 320) :
+		myColor = GetRGBFromWheel((map(x, 0, 320, 0, 255) + frame)%255)
+		for y in range(0, 32) :
+			px[x,y] = myColor
 	return image
 
 def LightSingleSimonColor(color) : 
@@ -175,8 +192,16 @@ def map(x, fromLow, fromHigh, toLow, toHigh) :
 frame = 0
 lastDrawTime = 0
 mode = 3 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter, Mode = 4 : Secret Test Image
+
 circuitPlayGroundType = 0 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
 matrixType = 0 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrixType = 2 : NeoPixel 8X8, MatrixType = 3 : Neo Pixel Ethernet
+if SystemType == 0 :
+	circuitPlayGroundType = 1
+	matrixType = 1
+elif SystemType == 1 :
+	circuitPlayGroundType = 1
+	matrixType = 3
+
 #circuitPlaygroundPort = '/dev/cu.usbmodem1411'
 #neoPixelMatrixPort = '/dev/cu.usbmodem2115241'
 circuitPlaygroundPort = '/dev/ttyACM0'
@@ -244,7 +269,7 @@ while 1:
 		simonState = 0
 
 	if mode == 0 :
-		image = GetVJModeImage(circuitPlayground.Light, circuitPlayground.X, circuitPlayground.Y, circuitPlayground.Z)
+		image = GetVJModeImage(circuitPlayground.X, circuitPlayground.Y, circuitPlayground.Z)
 		matrix.SetImage(image, 0, 0)
 
 	elif mode == 1 :

@@ -305,7 +305,7 @@ void loop() {
   unsigned long startMillis = millis();
 
   // collect data for length of sample window (in mS)
-  while (millis() - startMillis < 80)
+  while (millis() - startMillis < 50)
   {
     sample = analogRead(MIC_PIN);
     if (sample < 1024)  // toss out spurious readings

@@ -72,7 +72,12 @@ def GetAttractModeImage(frame, digiKeyLogo) :
 	draw = ImageDraw.Draw(image)
 
 	if frame > 612 :
-		draw.rectangle( (0,0,320,32), fill=(0, 0, 2*((frame-612))%255), outline=(0,0,2*((frame-612))%255) )
+		#draw.rectangle( (0,0,320,32), fill=(0, 0, 2*((frame-612))%255), outline=(0,0,2*((frame-612))%255) )
+		draw.rectangle( (0,0, 319, 31), fill=(0,0,0), outline=(0,0,0))
+		px = image.load()
+		for x in range(0, 320) :
+			for y in range(0, 32) :
+				px[x,y] = GetRGBFromWheel((map(x, 0, 320, 0, 255) + frame*3)%255)
 
 	elif frame > 486 :
 		draw.rectangle( (0,0,320,32), fill=(0, 2*((frame-486))%255, 0,), outline=(0,2*((frame-486))%255,0) )
@@ -170,7 +175,7 @@ def map(x, fromLow, fromHigh, toLow, toHigh) :
 frame = 0
 lastDrawTime = 0
 mode = 3 # Mode = 0 : VJ Mode, Mode = 1 : Simon, Mode = 2 : Attract, Mode = 3 : VU Meter, Mode = 4 : Secret Test Image
-circuitPlayGroundType = 1 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
+circuitPlayGroundType = 0 # circuitPlayGroundType = 0 : Simulation, circuitPlayGroundType = 1 : Real
 matrixType = 0 # matrixType = 0 : Simulation, matrixType = 1 : 32X32 RGB, matrixType = 2 : NeoPixel 8X8, MatrixType = 3 : Neo Pixel Ethernet
 #circuitPlaygroundPort = '/dev/cu.usbmodem1411'
 #neoPixelMatrixPort = '/dev/cu.usbmodem2115241'

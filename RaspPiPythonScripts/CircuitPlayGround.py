@@ -32,7 +32,22 @@ class CircuitPlayGround:
 		print 'Initialized CircuitPlayGround Serial Port'
  
 	def Read(self):
-		theString = self.ser.readline()
+
+		#Loop infinitely until contact has been made
+		keepTrying = 1
+		while keepTrying :
+			try :
+				theString = self.ser.readline()
+				keepTrying = 0
+			except :
+				try:
+					self.ser.close()
+					self.ser.open()
+					self.ser.timeout = 1
+					keepTrying = 1
+				except:
+					print "Open Failed"
+
 		myList = theString.split('	')
 		if len(myList) == 18 :
 			self.X = float(myList[0])

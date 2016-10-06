@@ -33,39 +33,42 @@ class CircuitPlayGround:
  
 	def Read(self):
 
+		theString = 'none'
 		#Loop infinitely until contact has been made
-		keepTrying = 1
-		while keepTrying :
-			try :
-				theString = self.ser.readline()
-				keepTrying = 0
-			except :
-				try:
-					self.ser.close()
-					self.ser.open()
-					self.ser.timeout = 1
-					keepTrying = 1
-				except:
-					print "Open Failed"
+		try :
+			theString = self.ser.readline()
+			keepTrying = 0
+			myList = theString.split('	')
+			if len(myList) == 18 :
+				self.X = float(myList[0])
+				self.Y = float(myList[1])
+				self.Z = float(myList[2])
+				self.Temp = float(myList[3])
+				self.SlideSwitch = int(myList[4])
+				self.L_Button = int(myList[5])
+				self.R_Button = int(myList[6])
+				self.Light = int(myList[7])
+				self.Sound = int(myList[8])
+				self.Cap2 = int(myList[9])
+				self.Cap3 = int(myList[10])
+				self.Cap0 = int(myList[11])
+				self.Cap1 = int(myList[12])
+				self.Cap9 = int(myList[13])
+				self.Cap10 = int(myList[14])
+				self.Cap6 = int(myList[15])
+				self.Cap12 = int(myList[16])
+				self.Mode = int(myList[17])
+		except :
+			try:
+				self.Mode = 2
+				time.sleep(0.05)
 
-		myList = theString.split('	')
-		if len(myList) == 18 :
-			self.X = float(myList[0])
-			self.Y = float(myList[1])
-			self.Z = float(myList[2])
-			self.Temp = float(myList[3])
-			self.SlideSwitch = int(myList[4])
-			self.L_Button = int(myList[5])
-			self.R_Button = int(myList[6])
-			self.Light = int(myList[7])
-			self.Sound = int(myList[8])
-			self.Cap2 = int(myList[9])
-			self.Cap3 = int(myList[10])
-			self.Cap0 = int(myList[11])
-			self.Cap1 = int(myList[12])
-			self.Cap9 = int(myList[13])
-			self.Cap10 = int(myList[14])
-			self.Cap6 = int(myList[15])
-			self.Cap12 = int(myList[16])
-			self.Mode = int(myList[17])
+				self.ser.close()
+				self.ser.open()
+				self.ser.timeout = 1
+				
+			except:
+				print "Open Failed"
+
+
 		return theString

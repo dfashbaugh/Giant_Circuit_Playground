@@ -65,3 +65,9 @@ Reset the circuit playground.
 
 There seems to be some issue with the capacitive touch sensing when the Circuit Playground sits for long periods of time.
 Resetting the system will make it recalibrate.
+
+### Circuit playground will not light up on boot
+
+Plug the circuit playground into the Raspberry Pi and reboot the system.
+
+This is a known bug. The python code will not start if a circuit playground is not plugged into the Raspberry Pi on startup.

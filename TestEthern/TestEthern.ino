@@ -144,17 +144,17 @@ void loop() {
                 myColor.blue = map(myColor.blue, 0, 255, 0, 128);
     
                 if(i < 64) // Strip 1
-                    leds1[i] = myColor;
+                    leds1[63 - i] = myColor;
                 else if(i < 128) // Strip 2
-                    leds2[i%64] = myColor;
+                    leds2[63 - i%64] = myColor;
                 else if(i < 192) // Strip 3
-                    leds3[i%64] = myColor;
+                    leds3[63 - i%64] = myColor;
                 else if(i < 256) // Strip 4
-                    leds4[i%64] = myColor;
+                    leds4[63 - i%64] = myColor;
                 else if(i < 320) // Strip 5
-                    leds5[i%64] = myColor;
+                    leds5[63 - i%64] = myColor;
                 else if(i < 384) // Strip 6
-                    leds6[i%64] = myColor;
+                    leds6[63 - i%64] = myColor;
                 else if(i < 512) // Strip 7
                     leds7[i%128] = myColor;
                 else if(i < 640) // Strip 8
@@ -185,13 +185,23 @@ void loop() {
                 else if(LED < 256) // Strip 4
                     leds4[LED%64] = myColor;
                 else if(LED < 320) // Strip 5
-                    leds5[LED%64] = myColor;
+                    leds5[63 - LED%64] = myColor;
                 else if(LED < 384) // Strip 6
-                    leds6[LED%64] = myColor;
+                    leds6[63 - LED%64] = myColor;
                 else if(LED < 512) // Strip 7
-                    leds7[LED%128] = myColor;
+                {
+                    if(LED < 384+64)
+                        leds7[63 - LED%64] = myColor;
+                    else 
+                        leds7[127 - LED%64] = myColor;
+                }
                 else if(LED < 640) // Strip 8
-                    leds8[LED%128] = myColor;
+                {
+                    if(LED < 512+64)
+                        leds8[63 - LED%64] = myColor;
+                    else 
+                        leds8[127 - LED%64] = myColor;
+                }
             } 
         }
         

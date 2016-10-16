@@ -79,7 +79,12 @@ This is a known bug. The python code will not start if a circuit playground is n
 
 ### 2ft CP
 
-Raspberry Pi 3 connects over Ethernet to a [Teensy 3.2](https://www.pjrc.com/store/teensy32.html) with [Ethernet Shield](https://www.pjrc.com/store/wiz820_sd_adaptor.html) and [WIZ820IO](http://www.digikey.com/product-detail/en/wiznet/WIZ820IO/1278-1015-ND/3829655).
+Raspberry Pi 3 connects over Ethernet to a [Teensy 3.2](https://www.pjrc.com/store/teensy32.html) with [Ethernet Shield](https://www.pjrc.com/store/wiz820_sd_adaptor.html)/[WIZ820IO](http://www.digikey.com/product-detail/en/wiznet/WIZ820IO/1278-1015-ND/3829655) and an [OCTOWS shield](https://www.pjrc.com/store/octo28_adaptor.html).
 
-The Adafruit 8x8 matrices
+The [Adafruit 8x8 matrices](https://www.adafruit.com/products/1487) are connected clockwise from the top right Matrix to output 1. 1-6 are in order, output 7 connects to matrix 7 & 8, output 8 connects to matrix 9 & 10.
+
+### 4ft CP
+Raspberry Pi 3 with a LED [matrix shield](https://github.com/hzeller/rpi-rgb-led-matrix/tree/master/adapter/active-3) from [OSHpark](https://oshpark.com/shared_projects/bFtff2GR). Matrices are connected in line clockwise beginning with the top right matrix with 16 pin IDC cables.
+
+
 

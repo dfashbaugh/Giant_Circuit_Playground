@@ -63,11 +63,23 @@ The circuit playground acts as a giant VU meter!
 
 Reset the circuit playground. 
 
-There seems to be some issue with the capacitive touch sensing when the Circuit Playground sits for long periods of time.
-Resetting the system will make it recalibrate.
+The Circuit Playground library continuously auto calibrates its capacitive touch which can cause it to be unresponsive if left for long periods of time.
+Resetting the system will make it responsive again.
 
 ### Circuit playground will not light up on boot
 
 Plug the circuit playground into the Raspberry Pi and reboot the system.
 
 This is a known bug. The python code will not start if a circuit playground is not plugged into the Raspberry Pi on startup.
+
+
+------------------------------------------------
+
+## Wiring
+
+### 2ft CP
+
+Raspberry Pi 3 connects over Ethernet to a [Teensy 3.2](https://www.pjrc.com/store/teensy32.html) with [Ethernet Shield](https://www.pjrc.com/store/wiz820_sd_adaptor.html) and [WIZ820IO](http://www.digikey.com/product-detail/en/wiznet/WIZ820IO/1278-1015-ND/3829655).
+
+The Adafruit 8x8 matrices
+

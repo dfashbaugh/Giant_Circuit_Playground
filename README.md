@@ -32,7 +32,7 @@ If this is a new setup, you will need to open the file TestNeoPixelMatrix.py and
 * If it works, then we need to set this up to be called on reboot.
  * Find the path to the TestNeoPixelMatrix.py file
  * Edit /etc/rc.local as root
- * Write "sudo /usr/bin/python <path from first step> &" on the last line of the file
+ * Write "sudo /usr/bin/python \<path from first step\> &" on the last line of the file
  * Save the file and reboot!
  
 ---------------------------------------
